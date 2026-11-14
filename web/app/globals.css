@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* Same palette as the Streamlit app (.streamlit/config.toml). */
+@theme inline {
+  --color-bg: #0d0b1a;
+  --color-panel: #1b1730;
+  --color-panel2: #241f3f;
+  --color-line: #2f2950;
+  --color-ink: #ece8ff;
+  --color-mute: #9c95bd;
+  --color-accent: #ff4b6e;
+  --color-sky: #4cc9f0;
+  --color-ok: #3ddc97;
+  --color-amber: #ffb454;
+  --color-grey: #5b6170;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 80% -10%, #1e1740 0%, #0d0b1a 55%) fixed, #0d0b1a;
+  color: #ece8ff;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+input[type="range"] {
+  accent-color: #ff4b6e;
+  width: 100%;
+  height: 1.25rem;
+  cursor: pointer;
+}
+
+input[type="date"] {
+  color-scheme: dark;
+}
+
+select option {
+  background: #1b1730;
+  color: #ece8ff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2f2950;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recharts-wrapper:focus,
+.recharts-surface:focus,
+.recharts-wrapper *:focus {
+  outline: none;
+}

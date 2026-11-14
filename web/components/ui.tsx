@@ -1,0 +1,223 @@
+"use client";
+
+// Small building blocks used by every screen (cards, KPI tiles, badges, buttons, sliders).
+import { AlertTriangle } from "lucide-react";
+import { useStore } from "@/lib/store";
+
+export const COLORS = {
+  accent: "#ff4b6e",
+  grey: "#5b6170",
+  sky: "#4cc9f0",
+  ok: "#3ddc97",
+  amber: "#ffb454",
+  ink: "#ece8ff",
+  mute: "#9c95bd",
+  line: "#2f2950",
+};
+
+export const tooltipStyle = {
+  contentStyle: { background: "#1b1730", border: "1px solid #2f2950", borderRadius: 10, color: "#ece8ff", fontSize: 13 },
+  itemStyle: { color: "#ece8ff" },
+  labelStyle: { color: "#9c95bd" },
+  cursor: { fill: "rgba(255,255,255,0.04)" },
+};
+
+export function PageHeader({ title, sub }: { title: string; sub?: string }) {
+  return (
+    <header className="mb-6">
+      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      {sub && <p className="mt-1 max-w-3xl text-sm text-mute">{sub}</p>}
+    </header>
+  );
+}
+
+export function Card({
+  title,
+  sub,
+  children,
+  className = "",
+  right,
+}: {
+  title?: string;
+  sub?: string;
+  children: React.ReactNode;
+  className?: string;
+  right?: React.ReactNode;
+}) {
+  return (
+    <section className={`rounded-2xl border border-line bg-panel/80 p-5 shadow-lg shadow-black/20 ${className}`}>
+      {(title || right) && (
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            {title && <h2 className="text-[15px] font-semibold">{title}</h2>}
+            {sub && <p className="mt-0.5 text-xs text-mute">{sub}</p>}
+          </div>
+          {right}
+        </div>
+      )}
+      {children}
+    </section>
+  );
+}
+
+export function Kpi({
+  label,
+  value,
+  note,
+  tone = "plain",
+}: {
+  label: string;
+  value: string;
+  note?: string;
+  tone?: "plain" | "bad" | "good" | "warn";
+}) {
+  const color = { plain: "text-ink", bad: "text-accent", good: "text-ok", warn: "text-amber" }[tone];
+  return (
+    <div className="rounded-2xl border border-line bg-panel/80 p-4">
+      <div className="text-xs text-mute">{label}</div>
+      <div className={`mt-1 text-3xl font-semibold tabular-nums ${color}`}>{value}</div>
+      {note && <div className="mt-1 text-xs text-mute">{note}</div>}
+    </div>
+  );
+}
+
+export function Badge({ kind, children }: { kind: string; children: React.ReactNode }) {
+  const styles: Record<string, string> = {
+    aging: "bg-amber/15 text-amber border-amber/40",
+    near_threshold: "bg-accent/15 text-accent border-accent/40",
+    broker: "bg-sky/15 text-sky border-sky/40",
+    done: "bg-ok/15 text-ok border-ok/40",
+    wait: "bg-white/5 text-mute border-line",
+  };
+  return (
+    <span
+      className={`inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium ${styles[kind] ?? styles.wait}`}
+    >
+      {children}
+    </span>
+  );
+}
+
+export function Button({
+  children,
+  onClick,
+  variant = "ghost",
+  disabled,
+  type = "button",
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  variant?: "primary" | "ghost";
+  disabled?: boolean;
+  type?: "button" | "submit";
+}) {
+  const v =
+    variant === "primary"
+      ? "bg-accent text-white hover:brightness-110"
+      : "border border-line bg-white/5 text-ink hover:bg-white/10";
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={`rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${v}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+export function Insight({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-sky/30 bg-sky/10 p-4 text-sm leading-relaxed">
+      <span className="mr-2 font-semibold text-sky">{label}</span>
+      {children}
+    </div>
+  );
+}
+
+/** Yellow banner shown while detect.flag_suspicious_claims is still the unwritten stub. */
+export function RuleMissingBanner() {
+  const { summary } = useStore();
+  if (!summary?.near_threshold_rule_missing) return null;
+  return (
+    <div className="mb-5 flex items-start gap-3 rounded-2xl border border-amber/40 bg-amber/10 p-4 text-sm">
+      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
+      <div>
+        <span className="font-semibold text-amber">The near-threshold claim rule is flagging 0 claims.</span>{" "}
+        <code className="rounded bg-black/30 px-1">flag_suspicious_claims()</code> in{" "}
+        <code className="rounded bg-black/30 px-1">detect.py</code> has not been written yet. The aging-claim alert
+        and the broker scorecard are working.
+      </div>
+    </div>
+  );
+}
+
+export function ErrorBox({ error }: { error: string | null }) {
+  if (!error) return null;
+  return (
+    <div className="mb-5 rounded-2xl border border-accent/40 bg-accent/10 p-4 text-sm">
+      <span className="font-semibold text-accent">Could not reach the API.</span> {error}. Is{" "}
+      <code className="rounded bg-black/30 px-1">uvicorn api:app --port 8000</code> running?
+    </div>
+  );
+}
+
+export function Loading() {
+  return <div className="py-16 text-center text-sm text-mute">Loading…</div>;
+}
+
+export function RuleSlider({
+  name,
+  label,
+  format,
+  compact,
+}: {
+  name: "threshold" | "window" | "band" | "multiple" | "aging_days";
+  label: string;
+  format: (v: number) => string;
+  compact?: boolean;
+}) {
+  const { rules, bounds, setRule } = useStore();
+  if (!rules || !bounds[name]) return null;
+  const [min, max, step] = bounds[name];
+  return (
+    <label className="block">
+      <div className={`flex items-baseline justify-between gap-2 ${compact ? "text-xs" : "text-sm"}`}>
+        <span className="text-mute">{label}</span>
+        <span className="font-semibold tabular-nums text-ink">{format(rules[name])}</span>
+      </div>
+      <input
+        type="range"
+        aria-label={label}
+        min={min}
+        max={max}
+        step={step}
+        value={rules[name]}
+        onChange={(e) => setRule({ [name]: Number(e.target.value) })}
+      />
+    </label>
+  );
+}
+
+export function Th({ children, right }: { children?: React.ReactNode; right?: boolean }) {
+  return (
+    <th className={`whitespace-nowrap px-3 py-2 text-xs font-medium text-mute ${right ? "text-right" : "text-left"}`}>
+      {children}
+    </th>
+  );
+}
+
+export function Td({
+  children,
+  right,
+  className = "",
+}: {
+  children?: React.ReactNode;
+  right?: boolean;
+  className?: string;
+}) {
+  return (
+    <td className={`px-3 py-2 text-sm ${right ? "text-right tabular-nums" : "text-left"} ${className}`}>{children}</td>
+  );
+}
