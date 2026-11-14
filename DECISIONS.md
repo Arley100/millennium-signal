@@ -71,3 +71,5 @@ One line per choice: what and why.
 - **Split requirements**: `backend/requirements.txt` (API only, versions pinned to the ones tested here) and `requirements-streamlit.txt`; Streamlit and Plotly would bloat the deployed function for no use.
 - **Logs go to `/tmp` on Vercel** because the code folder is read-only there. State is temporary on the hosted site; a database was out of scope.
 - **Services is a Beta feature on Vercel** and this deployment is untested from here.
+
+- **Log times are Eastern (America/Toronto), set in code.** Vercel's servers run on UTC, so the hosted Action log showed times five hours ahead. `tzdata` is pinned so the time zone works on any server.

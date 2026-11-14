@@ -6,6 +6,7 @@ Messages go to an outbox file instead of real email/SMS for the demo.
 """
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import pandas as pd
@@ -15,6 +16,15 @@ import pandas as pd
 LOG_DIR = Path("/tmp/millennium-logs") if os.environ.get("VERCEL") else Path(__file__).resolve().parent / "logs"
 ACTION_LOG = LOG_DIR / "action_log.csv"
 DECISIONS = LOG_DIR / "decisions.csv"
+
+# Every log time is Eastern (Montreal / Toronto / Ottawa), whatever clock the server
+# runs on. Vercel's servers use UTC, which made the hosted log five hours ahead.
+TIMEZONE = ZoneInfo("America/Toronto")
+
+
+def now() -> str:
+    return datetime.now(TIMEZONE).strftime("%Y-%m-%d %H:%M:%S")
+
 
 SENIOR_REVIEW = "Senior Claims Review"
 HEAD_DISTRIBUTION = "Head of Distribution"
@@ -27,7 +37,7 @@ def _append(path: Path, row: dict):
 
 
 def log_action(action: str, target: str, detail: str, by: str = "system"):
-    _append(ACTION_LOG, {"time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    _append(ACTION_LOG, {"time": now(),
                          "by": by, "action": action, "target": target, "detail": detail})
 
 
@@ -45,7 +55,7 @@ def read_decisions() -> dict:
 
 
 def record_decision(claim_id: str, decision: str, reviewer: str, note: str):
-    _append(DECISIONS, {"time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    _append(DECISIONS, {"time": now(),
                         "claim_id": claim_id, "decision": decision,
                         "reviewer": reviewer, "note": note})
     log_action(f"Human decision: {decision}", claim_id, note or "-", by=reviewer)

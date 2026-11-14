@@ -78,7 +78,7 @@ export default function LogPage() {
           <table className="w-full border-collapse">
             <thead className="sticky top-0 bg-panel2">
               <tr>
-                <Th>Time</Th>
+                <Th>Time (Eastern)</Th>
                 <Th>By</Th>
                 <Th>Action</Th>
                 <Th>Target</Th>
