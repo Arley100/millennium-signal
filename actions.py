@@ -81,3 +81,37 @@ def broker_alert(name: str, r: pd.Series, typical: pd.Series) -> str:
         f"Recommendation: keep selling through brokers, but route {name}'s new policies and claims "
         f"through senior review until the account is audited."
     )
+
+
+# ---------------------------------------------------------------------------
+# Aging Claim Alert (team-written detection: detect.aging_open_claims)
+# ---------------------------------------------------------------------------
+VP_CLAIMS = "VP of Claims"
+RETENTION = "Retention team"
+
+
+def aging_alert(row: pd.Series, max_days: int, to_team: str) -> str:
+    amount = "amount not recorded" if pd.isna(row.claim_amount) else f"${row.claim_amount:,.0f}"
+    return (
+        f"To: {VP_CLAIMS}\n"
+        f"Subject: Claim {row.claim_id} has waited {int(row.days_open)} days ({row.adjuster_team})\n\n"
+        f"Claim {row.claim_id} ({row.claim_type}, {amount}) on policy {row.policy_id} was reported "
+        f"{row.reported_date:%b %d, %Y} and is still '{row.status}' after {int(row.days_open)} days. "
+        f"Our limit is {max_days} days.\n"
+        f"Handled by: {row.adjuster_team} · {row.city}\n\n"
+        f"Suggested action: reassign this claim to {to_team}, which has capacity "
+        f"(fewest open claims and the fastest settlement time this year).\n"
+        f"Why it matters: customers who wait over 30 days renew 45% of the time, "
+        f"against 83% for those who wait 15 to 30 days."
+    )
+
+
+def retention_note(row: pd.Series) -> str:
+    return (
+        f"To: {RETENTION}\n"
+        f"Subject: Please contact customer {row.customer_id} about claim {row.claim_id}\n\n"
+        f"Customer {row.customer_id} ({row.city}, {row.policy_type} policy {row.policy_id}) has been "
+        f"waiting {int(row.days_open)} days for a {row.claim_type} claim.\n"
+        f"Please call to apologise for the delay, confirm the claim is being moved to a team "
+        f"with capacity, and give a named contact. This customer is at risk of not renewing."
+    )
