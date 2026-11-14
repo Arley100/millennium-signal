@@ -264,4 +264,4 @@ HANDOFF.md            How to run, demo path, plain-English file guide
 
 ## Team
 
-Arley Ndaribike and team.
+Arley Ndaribike and Wanlin Song.
