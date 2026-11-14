@@ -3,6 +3,8 @@
 Run:  streamlit run app.py
 Flow: DATA (clean.py) → DETECT (detect.py) → DECIDE (thresholds in sidebar) → ACT (actions.py)
 """
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -22,7 +24,7 @@ PLOT = dict(template="plotly_dark", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor=
 
 @st.cache_data
 def load():
-    return load_and_clean("data")
+    return load_and_clean(Path(__file__).resolve().parent / "data")
 
 
 policies, claims, cleaning_log = load()

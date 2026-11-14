@@ -7,7 +7,7 @@
 ## Start both servers (two PowerShell windows)
 
 ```powershell
-cd C:\Users\ndari\millennium-signal
+cd C:\Users\ndari\millennium-signal\backend
 pip install -r requirements.txt
 python -m uvicorn api:app --port 8000
 ```
@@ -19,7 +19,9 @@ npm run dev
 ```
 
 Open http://localhost:3000. If port 3000 is busy, Next.js prints the port it chose instead.
-Restart the first window after any change to a `.py` file. Fallback: `streamlit run app.py` still works.
+Restart the first window after any change to a `.py` file. Fallback, from the `backend` folder: `pip install -r requirements-streamlit.txt` then `streamlit run app.py`.
+
+**The Python files moved into `backend/`** (clean.py, detect.py, actions.py, api.py, app.py, data/) so Vercel can deploy them as a service. Nothing inside `detect.py` changed.
 
 ## What works (tested in the browser)
 
@@ -54,6 +56,14 @@ Restart the first window after any change to a `.py` file. Fallback: `streamlit 
 - A new claim of $10,000 or more typed into the form now creates a Senior queue task, so the live demo shows an action firing.
 - Tested through the API only; the new queue filter, priority column and rules card were not clicked in the browser.
 - **Open conflicts between the two analyses are listed at the end of DECISIONS.md. Read them before the Q&A.**
+
+## Vercel deployment (fourth pass)
+
+- Why the old link was a 404: the project built from the repo root (no Next.js app there) and had no Python backend.
+- Fix in the repo: `vercel.json` declares two services, `backend/` (FastAPI, answers `/api/*`) and `web/` (Next.js).
+- **You must change two project settings on vercel.com**: Framework Preset → **Services**; Root Directory → empty (repo root). Then redeploy.
+- Not tested on Vercel (no account access from here). Checked locally: the frontend production build passes, and the API runs with Vercel's read-only-disk setting.
+- On Vercel the log, decisions and saved rules are in temporary storage and can reset or differ between server instances. Demo locally for anything the judges will click.
 
 ## What was cut
 

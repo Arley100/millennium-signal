@@ -1,0 +1,5 @@
+# API only (this is what Vercel installs for the backend service).
+fastapi==0.163.0
+pandas==3.1.1
+numpy==2.4.6
+uvicorn==0.40.0

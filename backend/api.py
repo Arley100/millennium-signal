@@ -1,7 +1,8 @@
 """API layer: exposes the same DATA → DETECT → DECIDE → ACT pipeline as JSON
 for the Next.js front end (web/).
 
-Run:  uvicorn api:app --port 8000
+Run:  cd backend, then: python -m uvicorn api:app --port 8000
+On Vercel this file is the "backend" service (see vercel.json at the repo root).
 Nothing is re-implemented here: cleaning comes from clean.py, the three
 detections from detect.py, and the drafted messages / log from actions.py.
 """
@@ -23,7 +24,7 @@ from detect import (aging_open_claims, broker_scorecard, flag_reasons, flag_susp
 app = FastAPI(title="Millennium Signal API")
 LOCK = threading.Lock()
 
-POLICIES, CLAIMS, CLEANING_LOG = load_and_clean("data")
+POLICIES, CLAIMS, CLEANING_LOG = load_and_clean(Path(__file__).resolve().parent / "data")
 
 RULES_FILE = act.LOG_DIR / "rules.json"
 INTAKE_FILE = act.LOG_DIR / "intake.json"
@@ -65,7 +66,7 @@ def _read_json(path: Path, default):
 
 
 def _write_json(path: Path, data):
-    act.LOG_DIR.mkdir(exist_ok=True)
+    act.LOG_DIR.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=1), encoding="utf-8")
 
 

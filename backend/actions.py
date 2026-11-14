@@ -4,12 +4,15 @@ Chain: flagged claim -> routed to senior review queue -> alert drafted for the
 reviewer -> human decides (confirm hold / release) -> every step logged.
 Messages go to an outbox file instead of real email/SMS for the demo.
 """
+import os
 from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 
-LOG_DIR = Path("logs")
+# Local runs keep the logs next to the code. On Vercel the code folder is read-only,
+# so logs go to the temporary folder (they last only as long as the server instance).
+LOG_DIR = Path("/tmp/millennium-logs") if os.environ.get("VERCEL") else Path(__file__).resolve().parent / "logs"
 ACTION_LOG = LOG_DIR / "action_log.csv"
 DECISIONS = LOG_DIR / "decisions.csv"
 
@@ -18,7 +21,7 @@ HEAD_DISTRIBUTION = "Head of Distribution"
 
 
 def _append(path: Path, row: dict):
-    LOG_DIR.mkdir(exist_ok=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
     df = pd.DataFrame([row])
     df.to_csv(path, mode="a", header=not path.exists(), index=False)
 

@@ -1,0 +1,4 @@
+# Only for the original Streamlit fallback (app.py).
+-r requirements.txt
+streamlit>=1.45
+plotly>=5.20

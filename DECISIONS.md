@@ -63,3 +63,11 @@ One line per choice: what and why.
 7. **Policy count.** We remove 4 TEST policies (4,680). She keeps them (4,684). Premium totals are unaffected ($0 premium).
 8. **Renewal base.** We use decided policies only (Renewed / Not Renewed). She uses policies whose first year ended by the snapshot.
 9. **Rules.** The track brief says project code written before the event is not allowed, and at least one detection must be logic the team wrote and can explain. Her notes also flag that the general event deck restricts AI use more than the track brief does. Confirm with the organizers.
+
+## Vercel deployment
+
+- **Used Vercel Services (one project, two services)** rather than two separate projects: it is Vercel's documented way to pair FastAPI with Next.js on one domain, and `/api/*` keeps working without CORS or an extra URL to configure.
+- **Moved the Python pipeline into `backend/`**: a service needs its own root folder with its own `requirements.txt`. File contents are unchanged apart from paths.
+- **Split requirements**: `backend/requirements.txt` (API only, versions pinned to the ones tested here) and `requirements-streamlit.txt`; Streamlit and Plotly would bloat the deployed function for no use.
+- **Logs go to `/tmp` on Vercel** because the code folder is read-only there. State is temporary on the hosted site; a database was out of scope.
+- **Services is a Beta feature on Vercel** and this deployment is untested from here.

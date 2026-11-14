@@ -85,6 +85,7 @@ Data as of Oct 31, 2026.
 Requires Python 3.12+ and Node.js 20.9+.
 
 ```bash
+cd backend
 pip install -r requirements.txt
 python -m uvicorn api:app --port 8000
 ```
@@ -97,7 +98,11 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. Keep `policies.csv` and `claims.csv` in `data/`. The original Streamlit version still runs with `streamlit run app.py`.
+Open http://localhost:3000. Keep `policies.csv` and `claims.csv` in `backend/data/`. The original Streamlit version still runs from `backend/` with `pip install -r requirements-streamlit.txt` then `streamlit run app.py`.
+
+### Deploying to Vercel
+
+The repo is set up as one Vercel project with two services (see `vercel.json`): the FastAPI backend in `backend/` answers `/api/*`, the Next.js app in `web/` answers everything else. In the Vercel project settings set **Framework Preset** to **Services** and leave **Root Directory** empty (the repo root). On Vercel the action log, decisions and saved rules live in temporary storage, so they reset when the server instance restarts; run locally for a demo that must keep its state.
 
 ## Architecture
 
@@ -233,16 +238,17 @@ stateDiagram-v2
 ## Project structure
 
 ```
-data/                 The two raw exports (policies.csv, claims.csv)
-clean.py              Loads and cleans the exports; records every change
-detect.py             The three detections
-actions.py            Drafted messages, human decisions, action log
-api.py                FastAPI layer that serves the pipeline as JSON
-app.py                Original Streamlit interface (fallback)
+backend/data/         The two raw exports (policies.csv, claims.csv)
+backend/clean.py      Loads and cleans the exports; records every change
+backend/detect.py     The detections
+backend/actions.py    Drafted messages, human decisions, action log
+backend/api.py        FastAPI layer that serves the pipeline as JSON
+backend/app.py        Original Streamlit interface (fallback)
+vercel.json           Vercel Services config: backend + frontend in one project
 web/app/              One folder per screen
 web/components/       Navigation shell and shared interface pieces
 web/lib/store.tsx     Shared rules state and data fetching
-logs/                 Action log, decisions, saved rules (not in git)
+backend/logs/         Action log, decisions, saved rules (not in git)
 docs/screenshots/     Images used in this README
 DECISIONS.md          Every build choice and its reason
 HANDOFF.md            How to run, demo path, plain-English file guide
