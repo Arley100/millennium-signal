@@ -69,7 +69,7 @@ export default function OverviewPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.by_source} layout="vertical" margin={{ left: 8, right: 48, top: 16, bottom: 0 }}>
                 <CartesianGrid stroke={COLORS.line} horizontal={false} />
-                <XAxis type="number" tickFormatter={(v) => `${Math.round(v * 100)}%`} stroke={COLORS.mute} fontSize={12} />
+                <XAxis type="number" domain={[0, (max: number) => Math.ceil(max + 0.4)]} tickCount={6} tickFormatter={(v) => `${Math.round(v * 100)}%`} stroke={COLORS.mute} fontSize={12} />
                 <YAxis type="category" dataKey="source" stroke={COLORS.mute} fontSize={12} width={56} />
                 <Tooltip
                   {...tooltipStyle}

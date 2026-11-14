@@ -157,7 +157,7 @@ export default function DelaysPage() {
             <tbody>
               {data.aging.map((r) => (
                 <tr key={r.claim_id} className="border-t border-line">
-                  <Td className="font-mono text-[13px]">{r.claim_id}</Td>
+                  <Td className="whitespace-nowrap font-mono text-[13px]">{r.claim_id}</Td>
                   <Td>{r.adjuster_team}</Td>
                   <Td>{r.city}</Td>
                   <Td>{r.claim_type}</Td>

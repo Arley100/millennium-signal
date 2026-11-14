@@ -154,11 +154,11 @@ export default function QueuePage() {
                     <Td>
                       <Badge kind={t.kind}>{t.badge}</Badge>
                     </Td>
-                    <Td className="font-mono text-[13px]">{t.claim_id}</Td>
-                    <Td>
+                    <Td className="whitespace-nowrap font-mono text-[13px]">{t.claim_id}</Td>
+                    <Td className="whitespace-nowrap">
                       {t.source} · {t.city}
                     </Td>
-                    <Td>{t.claim_type}</Td>
+                    <Td className="whitespace-nowrap">{t.claim_type}</Td>
                     <Td right>{money(t.claim_amount)}</Td>
                     <Td right>{t.days_open ?? "–"}</Td>
                     <Td>

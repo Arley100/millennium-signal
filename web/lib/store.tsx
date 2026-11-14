@@ -43,6 +43,7 @@ type Store = {
   saving: boolean;
   setRule: (patch: Partial<Rules>) => void;
   refresh: () => void;
+  reload: () => void;
 };
 
 const Ctx = createContext<Store | null>(null);
@@ -76,16 +77,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const latest = useRef<Rules | null>(null);
 
   const refresh = useCallback(() => {
+    setVersion((v) => v + 1); // screens re-fetch right away, in parallel with the summary
     api<Summary>("/api/summary")
       .then((s) => {
         setSummary(s);
         setError(null);
-        setVersion((v) => v + 1);
       })
       .catch((e) => setError(String(e.message ?? e)));
   }, []);
 
-  useEffect(() => {
+  /** Re-read everything from the server, including the saved rules (used at start and after "Reset demo"). */
+  const reload = useCallback(() => {
     api<{ rules: Rules; bounds: Bounds; defaults: Rules }>("/api/rules")
       .then((r) => {
         setRules(r.rules);
@@ -96,6 +98,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       .catch((e) => setError(String(e.message ?? e)));
     refresh();
   }, [refresh]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
 
   const setRule = useCallback((patch: Partial<Rules>) => {
     if (!latest.current) return;
@@ -118,7 +124,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <Ctx.Provider value={{ rules, defaults, bounds, summary, version, error, saving, setRule, refresh }}>
+    <Ctx.Provider value={{ rules, defaults, bounds, summary, version, error, saving, setRule, refresh, reload }}>
       {children}
     </Ctx.Provider>
   );

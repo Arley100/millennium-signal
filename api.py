@@ -7,6 +7,7 @@ detections from detect.py, and the drafted messages / log from actions.py.
 """
 import json
 import threading
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
@@ -91,8 +92,21 @@ def intake_claims() -> pd.DataFrame:
     return df.reindex(columns=CLAIMS.columns)
 
 
+_DETECT_CACHE: dict = {}
+
+
 def detect(rules: dict) -> dict:
-    """Run the three detections with the current decision rules."""
+    """Run the three detections with the current decision rules.
+    The result is remembered until the rules or the typed-in claims change."""
+    stamp = INTAKE_FILE.stat().st_mtime_ns if INTAKE_FILE.exists() else 0
+    key = (rules["threshold"], rules["window"], rules["band"], rules["multiple"], rules["aging_days"], stamp)
+    if key not in _DETECT_CACHE:
+        _DETECT_CACHE.clear()
+        _DETECT_CACHE[key] = _detect(rules)
+    return _DETECT_CACHE[key]
+
+
+def _detect(rules: dict) -> dict:
     band = rules["band"] / 100
     claims = CLAIMS.copy()
     # Detection: near-threshold claims (detect.flag_suspicious_claims)
@@ -120,10 +134,12 @@ def detect(rules: dict) -> dict:
                 flagged_brokers=flagged_brokers, aging=aging, new=new, new_aging=new_aging)
 
 
+@lru_cache
 def team_cities() -> dict:
     return CLAIMS.groupby("adjuster_team").city.agg(lambda s: sorted(s.dropna().unique())).to_dict()
 
 
+@lru_cache
 def team_with_capacity(exclude: str) -> str:
     """Team to suggest for reassignment: fewest open claims, then fastest 2026 settlement."""
     open_ = CLAIMS[CLAIMS.closed_date.isna()].groupby("adjuster_team").size()
