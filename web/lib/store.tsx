@@ -27,6 +27,8 @@ export type Summary = {
   flagged_paid: number;
   flagged_brokers: string[];
   aging_claims: number;
+  senior_claims: number;
+  senior_value: number;
   near_threshold_rule_missing: boolean;
   rules: Rules;
 };

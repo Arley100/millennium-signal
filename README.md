@@ -28,6 +28,7 @@ Data as of Oct 31, 2026.
 | Claims paid ÷ premium earned | **64%** overall · **56%** without broker B07 |
 | Broker scorecard | **B07 is the only broker flagged**: 429% loss ratio, 3 of 3 warning signs |
 | Aging Claim Alert (N = 30 days) | **15 open claims**, 13 of them with one adjuster team |
+| Senior queue monitor | **11 claims of $10,000 or more still undecided** ($221,881 recorded, oldest 206 days) |
 | Renewal after a claim | **83%** when the wait was 15–30 days · **45%** past 30 days |
 
 ## What it found
@@ -43,7 +44,7 @@ Data as of Oct 31, 2026.
 | Step | What happens | Where |
 |---|---|---|
 | **Data** | Cleans the two exports. Every change is recorded with the number of rows and the reason. | Data & cleaning |
-| **Detect** | Runs the Aging Claim Alert, the near-threshold claim rule and the broker scorecard. | The pattern · Claim delays |
+| **Detect** | Runs the Aging Claim Alert, the senior queue monitor, the broker scorecard and the near-threshold claim rule. | The pattern · Claim delays |
 | **Decide** | People set the thresholds with sliders. Nothing is hard-coded to a broker or a team. | Decision rules |
 | **Act** | Each hit becomes a review task with drafted messages. A reviewer confirms or dismisses. | Review queue · Action log |
 
@@ -110,7 +111,7 @@ flowchart LR
     end
     subgraph Python["Python pipeline"]
         CL[clean.py<br/>cleaning + log]
-        DE[detect.py<br/>3 detections]
+        DE[detect.py<br/>4 detections]
         AC[actions.py<br/>drafts · decisions · log]
         API[api.py<br/>FastAPI · JSON]
     end
@@ -171,6 +172,7 @@ classDiagram
         reason
         evidence
         action
+        priority
         decision
     }
     class DraftedMessage {
@@ -186,7 +188,7 @@ classDiagram
     }
     Policy "1" --> "0..*" Claim : has
     Rules ..> ReviewTask : decides which claims qualify
-    Claim "1" --> "0..2" ReviewTask : aging / near threshold
+    Claim "1" --> "0..3" ReviewTask : aging / senior queue / near threshold
     ReviewTask "1" --> "1..2" DraftedMessage : drafts
     ReviewTask "1" --> "1..*" LogEntry : records
 ```
@@ -254,7 +256,7 @@ HANDOFF.md            How to run, demo path, plain-English file guide
 - The renewal comparison is a correlation in one year of data, not proof that delay causes non-renewal.
 - "Team with capacity" means fewest open claims, then fastest settlement this year.
 - Messages are drafts shown on screen and logged. Nothing is emailed.
-- **Current state:** the near-threshold claim rule (`flag_suspicious_claims` in `detect.py`) is not written yet, so 2 of 3 detections are active and the screenshots show 0 near-threshold claims.
+- **Current state:** the near-threshold claim rule (`flag_suspicious_claims` in `detect.py`) is not written yet, so 3 of 4 detections are active and the screenshots show 0 near-threshold claims.
 
 ## Tools and AI use
 
@@ -264,4 +266,4 @@ HANDOFF.md            How to run, demo path, plain-English file guide
 
 ## Team
 
-Arley Ndaribike and Wanlin Song.
+Arley Ndaribike · [Wanlin Song](https://devpost.com/wanlinsong33)

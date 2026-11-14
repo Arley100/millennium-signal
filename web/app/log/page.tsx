@@ -12,6 +12,7 @@ const FILTERS: { key: string; label: string; test: (r: Row) => boolean }[] = [
   { key: "all", label: "All", test: () => true },
   { key: "human", label: "Human decisions", test: (r) => r.by !== "system" },
   { key: "aging", label: "Aging claim", test: isAging },
+  { key: "senior", label: "Senior queue", test: (r) => /Senior/.test(r.action) || String(r.target).startsWith("SENIOR:") },
   { key: "new", label: "New claims", test: (r) => String(r.target).startsWith("NEW-") },
   { key: "broker", label: "Broker", test: (r) => /Broker|broker/.test(r.action) || String(r.target).startsWith("BROKER:") },
 ];
@@ -90,7 +91,7 @@ export default function LogPage() {
                   <Td className="whitespace-nowrap font-mono text-[12px] text-mute">{r.time}</Td>
                   <Td className={r.by === "system" ? "text-mute" : "text-ok"}>{r.by}</Td>
                   <Td className={tone(r)}>{r.action}</Td>
-                  <Td className="font-mono text-[13px]">{String(r.target).replace(/^(AGING|BROKER):/, "")}</Td>
+                  <Td className="font-mono text-[13px]">{String(r.target).replace(/^(AGING|BROKER|SENIOR):/, "")}</Td>
                   <Td className="text-mute">{r.detail}</Td>
                 </tr>
               ))}

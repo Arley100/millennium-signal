@@ -8,7 +8,8 @@ import { api, money, useApi, useStore } from "@/lib/store";
 
 type Task = {
   task_id: string;
-  kind: "near_threshold" | "aging";
+  kind: "near_threshold" | "aging" | "senior";
+  priority: "Critical" | "High";
   badge: string;
   claim_id: string;
   policy_id: string;
@@ -32,7 +33,7 @@ type Task = {
 type Queue = {
   tasks: Task[];
   broker_alerts: { task_id: string; broker: string; body: string; decision: string }[];
-  counts: { waiting: number; near_threshold: number; aging: number; decided: number };
+  counts: { waiting: number; near_threshold: number; aging: number; senior: number; critical: number; decided: number };
   intake: {
     policies: { policy_id: string; source: string; start_date: string }[];
     default_policy: string;
@@ -55,6 +56,7 @@ const FILTERS = [
   { key: "all", label: "All" },
   { key: "near_threshold", label: "Near threshold" },
   { key: "aging", label: "Aging claim" },
+  { key: "senior", label: "Senior queue" },
 ] as const;
 
 export default function QueuePage() {
@@ -77,7 +79,7 @@ export default function QueuePage() {
     setMsg(null);
     try {
       await api("/api/decision", { method: "POST", body: JSON.stringify({ task_id, decision, note }) });
-      setMsg(`Recorded “${decision}” for ${task_id.replace(/^(AGING|BROKER):/, "")} and wrote it to the action log.`);
+      setMsg(`Recorded “${decision}” for ${task_id.replace(/^(AGING|BROKER|SENIOR):/, "")} and wrote it to the action log.`);
       setNote("");
       refresh();
     } catch (e) {
@@ -97,10 +99,11 @@ export default function QueuePage() {
       />
       <RuleMissingBanner />
 
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <Kpi label="Awaiting review" value={String(data.counts.waiting)} />
-        <Kpi label="Near-threshold tasks" value={String(data.counts.near_threshold)} tone="bad" />
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-5">
+        <Kpi label="Awaiting review" value={String(data.counts.waiting)} note={`${data.counts.critical} critical`} />
         <Kpi label="Aging claim tasks" value={String(data.counts.aging)} tone="warn" />
+        <Kpi label="Senior queue tasks" value={String(data.counts.senior)} />
+        <Kpi label="Near-threshold tasks" value={String(data.counts.near_threshold)} tone="bad" />
         <Kpi label="Decided" value={String(data.counts.decided)} tone="good" />
       </div>
 
@@ -132,9 +135,9 @@ export default function QueuePage() {
               <thead className="sticky top-0 bg-panel2">
                 <tr>
                   <Th>Why</Th>
+                  <Th>Priority</Th>
                   <Th>Claim</Th>
-                  <Th>Sold by</Th>
-                  <Th>Type</Th>
+                  <Th>Team</Th>
                   <Th right>Amount</Th>
                   <Th right>Days open</Th>
                   <Th>Decision</Th>
@@ -155,11 +158,11 @@ export default function QueuePage() {
                     <Td>
                       <Badge kind={t.kind}>{t.badge}</Badge>
                     </Td>
-                    <Td className="whitespace-nowrap font-mono text-[13px]">{t.claim_id}</Td>
-                    <Td className="whitespace-nowrap">
-                      {t.source} · {t.city}
+                    <Td>
+                      <Badge kind={t.priority}>{t.priority}</Badge>
                     </Td>
-                    <Td className="whitespace-nowrap">{t.claim_type}</Td>
+                    <Td className="whitespace-nowrap font-mono text-[13px]">{t.claim_id}</Td>
+                    <Td className="whitespace-nowrap">{t.adjuster_team}</Td>
                     <Td right>{money(t.claim_amount)}</Td>
                     <Td right>{t.days_open ?? "–"}</Td>
                     <Td>
@@ -184,8 +187,12 @@ export default function QueuePage() {
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge kind={current.kind}>{current.badge}</Badge>
+                <Badge kind={current.priority}>{current.priority}</Badge>
                 <Badge kind={current.decision === "Awaiting review" ? "wait" : "done"}>{current.decision}</Badge>
               </div>
+              <p className="text-xs text-mute">
+                {current.claim_type} · sold by {current.source} · {current.city} · {current.adjuster_team}
+              </p>
               <div className="text-sm">
                 <div className="mb-1 flex items-center gap-2">
                   <span className="eyebrow">Why</span>

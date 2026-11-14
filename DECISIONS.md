@@ -45,3 +45,21 @@ One line per choice: what and why.
 - **CFO brief page** (`/brief`), printable on one page: NOVA's handover brief. All numbers are read live from the API.
 - **Usage guide page** (`/guide`) with a "Limits and uncertainties" section, as in NOVA's guide and README.
 - **Not borrowed**: the AI chat assistant, file upload/update flow and Vercel deployment (AI summary and Vercel were excluded for this build).
+
+## From Wanlin's pack (millennium-intelligence-pack.zip)
+
+- **Implemented her rule R2, the senior queue monitor**, as a new function in `detect.py`: our second claim-level detection was an empty stub, and this one is simple, explainable and already verified by her pipeline (11 claims, $221,880.92, oldest 206 days; our data gives the same).
+- **Did not run her script**; read it and reproduced her key figures on our cleaned data instead (channel proxy 61.3 / 41.6 / 42.8, B07 204.8% on written premium, 20 claims past 25 days).
+- **Did not port** her Ask parser, Supabase schema or four-state task lifecycle: too large for the time left.
+
+### Conflicts to settle as a team (not resolved by me)
+
+1. **Two prototypes.** Her pack describes a separate live app, "Millennium Intelligence". This repo is "Millennium Signal". Decide which one is demoed and submitted.
+2. **"Loss ratio" wording.** We show "64% / 56% loss ratio" and B07 at 429% on *earned* premium. Her guardrail says never call it a loss ratio; her figure is a "paid-to-recorded-premium proxy" on *written* premium (Broker 61.3%, B07 204.8%). Both are computed correctly; pick one basis and one name.
+3. **Aging threshold.** Ours defaults to 30 days (15 claims), justified by the renewal drop. Hers is 25 days, derived from the slowest team's mean resolution (20 claims), and she calls 30 days "illustrative, not an SLA".
+4. **Renewal claim.** Our drafted alert and brief say customers past 30 days renew 45% vs 83%. Her finding is 22.9% not renewed with a claim vs 14.4% without, over 2,308 eligible policies, and she insists on "associated with", never causation. Our wording "why it matters" and "where renewals fall off" is stronger than hers.
+5. **Broker B07.** We flag the broker and draft a message to the Head of Distribution to route its business through senior review. She says no action against the broker: one human referral to investigators, because 58 of its 60 theft claims sit between $7,500 and $9,999.
+6. **Near-threshold rule.** Ours expects 73 claims (early loss + just under the line) but is unwritten. Her equivalent is the B07 theft pattern above, as a single pattern task, not 73 claim tasks.
+7. **Policy count.** We remove 4 TEST policies (4,680). She keeps them (4,684). Premium totals are unaffected ($0 premium).
+8. **Renewal base.** We use decided policies only (Renewed / Not Renewed). She uses policies whose first year ended by the snapshot.
+9. **Rules.** The track brief says project code written before the event is not allowed, and at least one detection must be logic the team wrote and can explain. Her notes also flag that the general event deck restricts AI use more than the track brief does. Confirm with the organizers.

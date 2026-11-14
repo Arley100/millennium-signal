@@ -77,8 +77,8 @@ export default function BriefPage() {
         </Line>
 
         <Line label="What the system does" tag="fact">
-          Three detections run on every claim: the Aging Claim Alert (ours), the near-threshold claim rule and the broker
-          scorecard. Each hit creates a review task with the messages already drafted, and every step is logged.{" "}
+          Detections run on every claim: the Aging Claim Alert (ours), the senior queue monitor ({summary.senior_claims}{" "}
+          claims of $10,000 or more still undecided), the broker scorecard and the near-threshold claim rule. Each hit creates a review task with the messages already drafted, and every step is logged.{" "}
           {summary.near_threshold_rule_missing ? (
             <b className="text-amber">The near-threshold rule is not written yet and currently flags 0 claims.</b>
           ) : (

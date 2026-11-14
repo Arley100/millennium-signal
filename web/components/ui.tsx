@@ -87,6 +87,9 @@ export function Badge({ kind, children }: { kind: string; children: React.ReactN
     aging: "bg-amber/15 text-amber border-amber/40",
     near_threshold: "bg-accent/15 text-accent border-accent/40",
     broker: "bg-sky/15 text-sky border-sky/40",
+    senior: "bg-ink/10 text-ink border-ink/30",
+    Critical: "bg-accent text-white border-accent",
+    High: "bg-panel2 text-mute border-line",
     done: "bg-ok/15 text-ok border-ok/40",
     wait: "bg-panel2 text-mute border-line",
   };

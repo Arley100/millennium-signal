@@ -82,3 +82,14 @@ def broker_scorecard(policies: pd.DataFrame, claims: pd.DataFrame, flags: pd.Ser
 def aging_open_claims(claims: pd.DataFrame, max_days: int = 30) -> pd.DataFrame:
     open_ = claims[claims.status.isin(["Open", "Under Review"])]
     return open_[open_.days_open > max_days].sort_values("days_open", ascending=False)
+
+
+# ---------------------------------------------------------------------------
+# Senior queue monitor (rule R2 from Wanlin's pipeline, millennium_pipeline.py)
+# ---------------------------------------------------------------------------
+def senior_queue_stalled(claims: pd.DataFrame, threshold: float = 10_000) -> pd.DataFrame:
+    """Claims the company ALREADY routes to senior review (amount >= threshold)
+    that are still Open or Under Review. We do not re-route them: we watch the
+    queue so a stalled senior review gets a decision. Missing amounts are left out."""
+    open_ = claims[claims.status.isin(["Open", "Under Review"])]
+    return open_[open_.claim_amount >= threshold].sort_values("days_open", ascending=False)

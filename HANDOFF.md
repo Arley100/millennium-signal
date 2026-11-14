@@ -45,6 +45,16 @@ Restart the first window after any change to a `.py` file. Fallback: `streamlit 
 - Checked by loading every screen and reading the page contents and styles; **not checked by eye**: screenshots were
   unavailable, so look at each screen once before the demo. Printing the brief (Ctrl+P) was not tested.
 
+## Added from Wanlin's pack (third pass)
+
+- **Senior queue monitor** (`senior_queue_stalled` in `detect.py`, her rule R2): claims of $10,000 or more that are
+  still Open or Under Review. 11 claims, $221,880.92, oldest 206 days: identical to her pipeline's figures.
+- Each one gets a "Senior queue" task, a prepared message to the Senior Claims Review lead, and log lines.
+- Tasks now carry a **priority** (Critical when two rules hit the same claim, or it is over 90 days or $20,000; else High), as in her pipeline.
+- A new claim of $10,000 or more typed into the form now creates a Senior queue task, so the live demo shows an action firing.
+- Tested through the API only; the new queue filter, priority column and rules card were not clicked in the browser.
+- **Open conflicts between the two analyses are listed at the end of DECISIONS.md. Read them before the Q&A.**
+
 ## What was cut
 
 AI summary, real email, Vercel (as instructed). 21st.dev components (see DECISIONS.md).

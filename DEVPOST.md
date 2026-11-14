@@ -19,7 +19,7 @@ The CFO's question was simple: "We're writing more business than ever and making
 Millennium Signal follows four steps: DATA → DETECT → DECIDE → ACT.
 
 - **Data.** Cleans the policy and claim exports (duplicates, test records, mixed date formats, text premiums, city spellings) and logs every change with its reason.
-- **Detect.** Runs three detections: our Aging Claim Alert, a near-threshold claim rule and a broker scorecard.
+- **Detect.** Runs our Aging Claim Alert, a senior queue monitor (claims of $10,000 or more still undecided), a broker scorecard and a near-threshold claim rule.
 - **Decide.** People set every threshold with sliders. Nothing is hard-coded to a broker or a team.
 - **Act.** Each hit becomes a review task with drafted messages. A reviewer confirms or dismisses, and every step is logged.
 
@@ -29,6 +29,7 @@ What it found in the data (as of Oct 31, 2026):
 - Broker B07 pays out 429% of the premium it earns. The other nine brokers look like the company's own channels.
 - One adjuster team's settlement time roughly doubled in 2026. Customers who waited over 30 days renewed 45% of the time, against 83% for a 15–30 day wait.
 - 15 claims have been open more than 30 days, 13 with one team.
+- 11 claims of $10,000 or more are still undecided in the senior-review queue; the oldest has waited 206 days.
 
 **Our detection: the Aging Claim Alert.** A claim that is Open or Under Review more than N days after it was reported (default 30). Each one automatically creates a review task, a drafted alert to the VP of Claims suggesting reassignment to a team with capacity, and a drafted note to Retention to contact the customer.
 
@@ -60,7 +61,7 @@ What it found in the data (as of Oct 31, 2026):
 
 ## What's next
 
-- Finish the near-threshold claim rule (currently 2 of 3 detections are active). [Remove this line once it is written.]
+- Finish the near-threshold claim rule (currently 3 of 4 detections are active). [Remove this line once it is written.]
 - Send the drafted messages by email or chat instead of showing them on screen.
 - Track whether reassigned claims settle faster, to check the rule works.
 
@@ -92,7 +93,7 @@ python, pandas, fastapi, next.js, react, typescript, tailwindcss, recharts
 
 ## Before you submit
 
-- [ ] Team member names and Devpost accounts added. [Only Arley is listed in the README.]
+- [ ] Team: Arley Ndaribike and Wanlin Song (https://devpost.com/wanlinsong33). Add both as Devpost members.
 - [ ] Hackathon name and challenge track selected.
 - [ ] If the near-threshold rule gets written, retake the screenshots and update the "0 claims" lines here and in the README.
 - [ ] Repository is public.

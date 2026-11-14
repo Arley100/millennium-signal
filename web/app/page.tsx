@@ -46,10 +46,9 @@ export default function OverviewPage() {
           tone="good"
         />
         <Kpi
-          label="Near-threshold claims flagged"
-          value={String(summary.flagged_claims)}
-          note={`${money(summary.flagged_paid)} paid on them`}
-          tone="bad"
+          label="Stalled senior reviews"
+          value={String(summary.senior_claims)}
+          note={`${money(summary.senior_value)} recorded, still undecided`}
         />
         <Kpi
           label="Aging claims"

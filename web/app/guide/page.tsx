@@ -23,7 +23,7 @@ export default function GuidePage() {
               <b>Data.</b> Two exports are cleaned; every change is listed in <L href="/data">Data &amp; cleaning</L>.
             </li>
             <li>
-              <b>Detect.</b> Three rules run: the Aging Claim Alert, the near-threshold claim rule and the broker scorecard
+              <b>Detect.</b> Four rules run: the Aging Claim Alert, the senior queue monitor, the broker scorecard and the near-threshold claim rule
               (<L href="/pattern">The pattern</L>, <L href="/delays">Claim delays</L>).
             </li>
             <li>
@@ -88,7 +88,7 @@ export default function GuidePage() {
             <li>Messages are drafts on screen and in the log. Nothing is emailed.</li>
             {summary?.near_threshold_rule_missing && (
               <li className="text-amber">
-                The near-threshold rule in detect.py is not written yet, so 2 of 3 detections are active.
+                The near-threshold rule in detect.py is not written yet, so 3 of 4 detections are active.
               </li>
             )}
           </ul>

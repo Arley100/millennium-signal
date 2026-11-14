@@ -115,3 +115,16 @@ def retention_note(row: pd.Series) -> str:
         f"Please call to apologise for the delay, confirm the claim is being moved to a team "
         f"with capacity, and give a named contact. This customer is at risk of not renewing."
     )
+
+
+def senior_alert(row: pd.Series, threshold: float) -> str:
+    return (
+        f"To: {SENIOR_REVIEW} lead\n"
+        f"Subject: Senior-review claim {row.claim_id} still {row.status} after {int(row.days_open)} days\n\n"
+        f"Claim {row.claim_id} ({row.claim_type}, ${row.claim_amount:,.0f}) is at or above the "
+        f"${threshold:,.0f} line, so it was routed to senior review under the existing company rule.\n"
+        f"It was reported {row.reported_date:%b %d, %Y} and has no decision yet.\n"
+        f"Handled by: {row.adjuster_team} · {row.city}\n\n"
+        f"Suggested action: assign a named senior reviewer and set a decision date.\n"
+        f"This is a prepared message shown in the app; nothing has been sent."
+    )

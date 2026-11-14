@@ -17,7 +17,7 @@ export default function RulesPage() {
       />
       <RuleMissingBanner />
 
-      <div className="grid gap-4 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card title="Aging Claim Alert" sub="Written by our team (aging_open_claims)." right={<Badge kind="aging">Aging claim</Badge>}>
           <p className="mb-4 text-sm leading-relaxed">
             Flags a claim that is <b>Open</b> or <b>Under Review</b> more than <b>{rules.aging_days} days</b> after it was
@@ -38,6 +38,15 @@ export default function RulesPage() {
             <RuleSlider name="band" label="Just under the line = within" format={(v) => `${v}% below`} />
           </div>
           <Catch label="Claims caught" value={String(summary.flagged_claims)} color="text-accent" />
+        </Card>
+
+        <Card title="Senior queue monitor" sub="From Wanlin's pipeline (rule R2)." right={<Badge kind="senior">Senior queue</Badge>}>
+          <p className="mb-4 text-sm leading-relaxed">
+            Claims of <b>{money(rules.threshold)}</b> or more already go to senior review. This rule does not re-route
+            them: it lists the ones still <b>Open</b> or <b>Under Review</b>, so a stalled senior review gets a decision.
+          </p>
+          <RuleSlider name="threshold" label="Senior-review threshold" format={(v) => money(v)} />
+          <Catch label={`Stalled senior reviews (${money(summary.senior_value)} recorded)`} value={String(summary.senior_claims)} color="text-ink" />
         </Card>
 
         <Card title="Broker scorecard" sub="Compares each broker with the typical broker." right={<Badge kind="broker">Broker</Badge>}>

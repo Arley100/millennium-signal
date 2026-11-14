@@ -17,7 +17,8 @@ from pydantic import BaseModel, Field
 
 import actions as act
 from clean import EXTRACT_DATE, load_and_clean
-from detect import aging_open_claims, broker_scorecard, flag_reasons, flag_suspicious_claims
+from detect import (aging_open_claims, broker_scorecard, flag_reasons, flag_suspicious_claims,
+                    senior_queue_stalled)
 
 app = FastAPI(title="Millennium Signal API")
 LOCK = threading.Lock()
@@ -126,11 +127,15 @@ def _detect(rules: dict) -> dict:
         new["flagged"] = nf.values
         new["reason"] = np.where(nf, flag_reasons(new, rules["window"], rules["threshold"], band), "")
         new_aging = aging_open_claims(new, rules["aging_days"])
+        new_senior = senior_queue_stalled(new, rules["threshold"])
     else:
         new["flagged"] = False
         new["reason"] = ""
         new_aging = new
-    return dict(claims=claims, flags=flags, scorecard=scorecard, typical=typical,
+        new_senior = new
+    # Detection: senior queue monitor (detect.senior_queue_stalled)
+    senior = senior_queue_stalled(claims, rules["threshold"])
+    return dict(senior=senior, new_senior=new_senior, claims=claims, flags=flags, scorecard=scorecard, typical=typical,
                 flagged_brokers=flagged_brokers, aging=aging, new=new, new_aging=new_aging)
 
 
@@ -183,6 +188,11 @@ def sync_actions(d: dict, rules: dict):
                  f"Suggest reassigning from {r.adjuster_team} to {to_team}")
             once("Note drafted: Retention", r.claim_id,
                  f"Contact customer {r.customer_id} about the delay")
+        for _, r in _stack(d["new_senior"], d["senior"]).iterrows():
+            once("Senior queue: review task created", r.claim_id,
+                 f"${r.claim_amount:,.0f}, {r.status} for {int(r.days_open)} days")
+            once("Message prepared: Senior Claims Review", r.claim_id,
+                 "Ask for a named reviewer and a decision date")
 
 
 def build_tasks(d: dict, rules: dict) -> list[dict]:
@@ -195,7 +205,18 @@ def build_tasks(d: dict, rules: dict) -> list[dict]:
                 "city": r.city, "claim_type": r.claim_type, "claim_amount": num(r.claim_amount, 2),
                 "status": r.status, "adjuster_team": r.adjuster_team,
                 "days_from_start": num(r.days_from_start, 0), "days_open": num(r.days_open, 0),
+                "priority": priority(r),
                 "decision": decisions.get(task_id, "Awaiting review")}
+
+    aging_ids = set(_stack(d["new_aging"], d["aging"]).claim_id)
+    senior_ids = set(_stack(d["new_senior"], d["senior"]).claim_id)
+
+    def priority(r):
+        """Critical when two rules hit the same claim, or it is very old or very large."""
+        both = r.claim_id in aging_ids and r.claim_id in senior_ids
+        big = pd.notna(r.claim_amount) and r.claim_amount >= 20_000
+        old = pd.notna(r.days_open) and r.days_open > 90
+        return "Critical" if both or big or old else "High"
 
     near = _stack(_flagged(d["new"]), _flagged(d["claims"]))
     for _, r in near.sort_values("claim_amount", ascending=False).iterrows():
@@ -219,6 +240,17 @@ def build_tasks(d: dict, rules: dict) -> list[dict]:
                  alerts=[{"to": act.VP_CLAIMS, "body": act.aging_alert(r, rules["aging_days"], to_team)},
                          {"to": act.RETENTION, "body": act.retention_note(r)}])
         tasks.append(t)
+    for _, r in _stack(d["new_senior"], d["senior"]).sort_values("days_open", ascending=False).iterrows():
+        t = base(r, "senior", "Senior queue", f"SENIOR:{r.claim_id}")
+        t.update(reason=f"Recorded amount ${r.claim_amount:,.0f} is at or above the ${rules['threshold']:,.0f} "
+                        f"line, so the company already routes it to senior review; it is still {r.status} "
+                        f"after {int(r.days_open)} days",
+                 action="Assign a named senior reviewer and set a decision date",
+                 evidence=[f"claims.csv · {r.claim_id}", f"claim_amount = {r.claim_amount:,.2f}",
+                           f"status = {r.status}", f"days_open = {int(r.days_open)}"],
+                 options=["Confirm escalation", "Dismiss"],
+                 alerts=[{"to": f"{act.SENIOR_REVIEW} lead", "body": act.senior_alert(r, rules["threshold"])}])
+        tasks.append(t)
     return tasks
 
 
@@ -240,6 +272,8 @@ def summary_of(d: dict, rules: dict) -> dict:
         "flagged_paid": num(flagged.paid_amount_filled.sum(), 2),
         "flagged_brokers": fb,
         "aging_claims": int(len(d["aging"]) + len(d["new_aging"])),
+        "senior_claims": int(len(d["senior"]) + len(d["new_senior"])),
+        "senior_value": num(d["senior"].claim_amount.sum(), 2),
         # True while detect.flag_suspicious_claims is still the unwritten stub.
         "near_threshold_rule_missing": bool(d["flags"].sum() == 0),
         "rules": rules,
@@ -337,6 +371,8 @@ def queue():
         "counts": {"waiting": len(waiting),
                    "near_threshold": sum(t["kind"] == "near_threshold" for t in tasks),
                    "aging": sum(t["kind"] == "aging" for t in tasks),
+                   "senior": sum(t["kind"] == "senior" for t in tasks),
+                   "critical": sum(t["priority"] == "Critical" for t in tasks),
                    "decided": len(tasks) - len(waiting)},
         "intake": {"policies": [{"policy_id": r.policy_id, "source": r.source,
                                  "start_date": f"{r.start_date:%Y-%m-%d}"} for r in opts.itertuples()],
@@ -396,7 +432,9 @@ def new_claim(body: NewClaim):
     if near:
         outcome, message = "flagged", f"Flagged → payment held, routed to {act.SENIOR_REVIEW}. {me.reason}."
     elif body.amount >= rules["threshold"]:
-        outcome, message = "senior", "At or above the threshold → senior review under the existing company rule."
+        outcome = "senior"
+        message = ("At or above the threshold → senior review under the existing company rule. "
+                   "A Senior queue task was created so the review does not stall.")
     else:
         outcome = "clear"
         message = (f"Not flagged by the near-threshold rule → normal adjuster approval. "
