@@ -275,4 +275,4 @@ HANDOFF.md            How to run, demo path, plain-English file guide
 
 ## Team
 
-Arley Ndaribike · [Wanlin Song](https://devpost.com/wanlinsong33)
+Arley Ndaribike · Wanlin Song
