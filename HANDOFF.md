@@ -54,7 +54,7 @@ Restart the first window after any change to a `.py` file. Fallback, from the `b
 - Each one gets a "Senior queue" task, a prepared message to the Senior Claims Review lead, and log lines.
 - Tasks now carry a **priority** (Critical when two rules hit the same claim, or it is over 90 days or $20,000; else High), as in her pipeline.
 - A new claim of $10,000 or more typed into the form now creates a Senior queue task, so the live demo shows an action firing.
-- Tested through the API only; the new queue filter, priority column and rules card were not clicked in the browser.
+- Clicked in the browser: the Senior queue filter, Confirm escalation, and a $12,000 new claim creating a task.
 - **Open conflicts between the two analyses are listed at the end of DECISIONS.md. Read them before the Q&A.**
 
 ## Vercel deployment (fourth pass)
@@ -62,8 +62,15 @@ Restart the first window after any change to a `.py` file. Fallback, from the `b
 - Why the old link was a 404: the project built from the repo root (no Next.js app there) and had no Python backend.
 - Fix in the repo: `vercel.json` declares two services, `backend/` (FastAPI, answers `/api/*`) and `web/` (Next.js).
 - **You must change two project settings on vercel.com**: Framework Preset → **Services**; Root Directory → empty (repo root). Then redeploy.
-- Not tested on Vercel (no account access from here). Checked locally: the frontend production build passes, and the API runs with Vercel's read-only-disk setting.
+- **Live at https://millennium-signal.vercel.app** (checked: the page loads without a login and `/api/summary` returns 4,680 / 847 / 64% / 56%). The production branch had to be set to `master` in Vercel.
 - On Vercel the log, decisions and saved rules are in temporary storage and can reset or differ between server instances. Demo locally for anything the judges will click.
+
+## Final check (fifth pass)
+
+- Clicked every button and filter on Review queue and Action log, and the Print button on the CFO brief. All work.
+- The CFO brief printed on two pages; fixed, and it now fits one A4 page (`docs/cfo-brief.pdf`).
+- Still open, by your instruction: `flag_suspicious_claims` is unwritten (3 of 4 detections active).
+- Still open, team decisions: conflicts 1, 3, 5, 6, 7, 8 and 9 at the end of DECISIONS.md.
 
 ## What was cut
 
@@ -77,7 +84,7 @@ AI summary, real email, Vercel (as instructed). 21st.dev components (see DECISIO
 4. **Move a slider**: drag "Aging claim after" in the left panel (15 → more/fewer), or "Broker vs typical" to 4× (B07 drops off), then put it back.
 5. **Review queue**: pick an Aging claim task, read the two drafted messages, click **Confirm reassignment**
    (this replaces "Confirm hold" until the near-threshold rule exists).
-6. **Submit the pre-filled new claim** (bottom right). Today it answers "Not flagged"; with the rule written it will be held.
+6. **Submit a new claim** (bottom right): change the amount to 12,000 and submit. A Senior queue task appears. (The pre-filled $9,400 answers "Not flagged" until the near-threshold rule is written.)
 7. **Action log**: the decision and the new claim are at the top.
 8. **CFO brief**: the one-page answer; Ctrl+P prints it.
 9. Optional: **Claim delays** for the rule next to its justification (83% vs 45% renewal).

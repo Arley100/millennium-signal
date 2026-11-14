@@ -105,6 +105,26 @@ input[type="range"] {
     padding: 0 !important;
     border-radius: 0 !important;
   }
+  html {
+    font-size: 11.5px !important; /* shrinks every rem-based size so the brief fits one page */
+  }
+  .shell > div,
+  .shell > div > div {
+    height: auto !important;
+    overflow: visible !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+  .shell-main > div {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .brief dl > div {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    break-inside: avoid;
+  }
   .brief {
     border: 0 !important;
     box-shadow: none !important;
@@ -116,3 +136,4 @@ input[type="range"] {
     margin: 14mm;
   }
 }
+

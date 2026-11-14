@@ -87,7 +87,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                       {label}
                       {href === "/queue" && summary && (
                         <span className="ml-auto rounded-full bg-line px-1.5 text-[11px] tabular-nums text-ink">
-                          {summary.flagged_claims + summary.aging_claims + summary.senior_claims}
+                          {summary.flagged_claims + summary.aging_claims + (summary.senior_claims ?? 0)}
                         </span>
                       )}
                     </Link>
@@ -118,7 +118,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <dl className="space-y-1.5 px-2.5 text-sm">
               <Row label="Near-threshold claims" value={summary ? String(summary.flagged_claims) : "–"} color="text-accent" />
               <Row label="Aging claims" value={summary ? String(summary.aging_claims) : "–"} color="text-amber" />
-              <Row label="Stalled senior reviews" value={summary ? String(summary.senior_claims) : "–"} color="text-ink" />
+              <Row label="Stalled senior reviews" value={summary ? String(summary.senior_claims ?? 0) : "–"} color="text-ink" />
               <Row label="Brokers flagged" value={summary ? summary.flagged_brokers.join(", ") || "none" : "–"} color="text-sky" />
             </dl>
           </div>

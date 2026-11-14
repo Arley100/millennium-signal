@@ -8,6 +8,8 @@
 
 **DATA → DETECT → DECIDE → ACT**
 
+[Live demo](https://millennium-signal.vercel.app) · Hack 2 the Future · Business Track
+
 </div>
 
 ---
@@ -59,7 +61,7 @@ Data as of Oct 31, 2026.
 
 **Evidence and honesty labels.** Every task shows the exact fields the rule used (`status = Under Review`, `days_open = 206`). Statements are tagged **From the data** or **Our recommendation**, so a suggestion is never presented as a fact.
 
-**One-page CFO brief.** The whole answer on a single printable page, with numbers read live from the data.
+**One-page CFO brief.** The whole answer on a single printable page, with numbers read live from the data ([PDF](docs/cfo-brief.pdf)).
 
 ![CFO brief](docs/screenshots/02-cfo-brief.png)
 

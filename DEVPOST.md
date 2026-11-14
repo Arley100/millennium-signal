@@ -71,6 +71,7 @@ python, pandas, fastapi, next.js, react, typescript, tailwindcss, recharts
 
 ## Try it out links
 
+- Live demo: https://millennium-signal.vercel.app
 - GitHub: https://github.com/Arley100/millennium-signal
 - [Demo video link]
 
@@ -88,12 +89,12 @@ python, pandas, fastapi, next.js, react, typescript, tailwindcss, recharts
 2. 0:20 The pattern: broker scorecard, move a slider.
 3. 0:45 Claim delays: the rule next to the 83% / 45% chart.
 4. 1:05 Review queue: open an aging claim, read the two drafted messages, confirm.
-5. 1:30 Submit a new claim, then show the Action log.
+5. 1:30 Submit a new claim of $12,000 (it creates a Senior queue task), then show the Action log.
 6. 1:45 CFO brief: the one-page answer.
 
 ## Before you submit
 
 - [ ] Team: Arley Ndaribike and Wanlin Song (https://devpost.com/wanlinsong33). Add both as Devpost members.
-- [ ] Hackathon name and challenge track selected.
+- [ ] Hackathon and track selected: Hack 2 the Future, Business Track (Option A, Millennium Mutual).
 - [ ] If the near-threshold rule gets written, retake the screenshots and update the "0 claims" lines here and in the README.
 - [ ] Repository is public.
