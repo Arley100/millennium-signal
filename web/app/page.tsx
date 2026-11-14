@@ -80,7 +80,7 @@ export default function OverviewPage() {
                 />
                 <ReferenceLine
                   x={1}
-                  stroke="#ffffff"
+                  stroke="#1f2433"
                   strokeDasharray="4 4"
                   label={{ value: "break-even before costs", fill: COLORS.mute, fontSize: 11, position: "top" }}
                 />

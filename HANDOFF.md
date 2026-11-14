@@ -18,7 +18,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. If port 3000 is busy, Next.js prints the port it chose instead (it was 3001 on this machine).
+Open http://localhost:3000. If port 3000 is busy, Next.js prints the port it chose instead.
 Restart the first window after any change to a `.py` file. Fallback: `streamlit run app.py` still works.
 
 ## What works (tested in the browser)
@@ -37,6 +37,14 @@ Restart the first window after any change to a `.py` file. Fallback: `streamlit 
 - The pattern screen was checked by its contents (827 dots, both charts, scorecard) but not by screenshot.
 - "Confirm hold" and a flagged new claim cannot be shown until the near-threshold rule is written.
 
+## Added in the second pass (ideas from memory_360_NOVA)
+
+- Light theme with dark grouped navigation, top status bar, breadcrumb headers.
+- "From the data" / "Our recommendation" labels and evidence chips on queue tasks.
+- **CFO brief** (`/brief`, one printable page) and **Usage guide** (`/guide`, with limits and uncertainties).
+- Checked by loading every screen and reading the page contents and styles; **not checked by eye**: screenshots were
+  unavailable, so look at each screen once before the demo. Printing the brief (Ctrl+P) was not tested.
+
 ## What was cut
 
 AI summary, real email, Vercel (as instructed). 21st.dev components (see DECISIONS.md).
@@ -51,7 +59,8 @@ AI summary, real email, Vercel (as instructed). 21st.dev components (see DECISIO
    (this replaces "Confirm hold" until the near-threshold rule exists).
 6. **Submit the pre-filled new claim** (bottom right). Today it answers "Not flagged"; with the rule written it will be held.
 7. **Action log**: the decision and the new claim are at the top.
-8. Optional: **Claim delays** for the rule next to its justification (83% vs 45% renewal).
+8. **CFO brief**: the one-page answer; Ctrl+P prints it.
+9. Optional: **Claim delays** for the rule next to its justification (83% vs 45% renewal).
 
 ## Files in plain English
 
@@ -64,7 +73,7 @@ AI summary, real email, Vercel (as instructed). 21st.dev components (see DECISIO
 - `web/components/shell.tsx`: the left panel (navigation, sliders, live counts). Remove a line from `NAV` to hide a screen.
 - `web/components/ui.tsx`: shared pieces: cards, number tiles, badges, buttons, sliders, the yellow warning banner.
 - `web/app/page.tsx`: Overview. `web/app/pattern`: The pattern. `web/app/queue`: Review queue and new-claim form.
-  `web/app/delays`: Claim delays and the aging rule. `web/app/rules`: Decision rules. `web/app/log`: Action log. `web/app/data`: cleaning steps.
+  `web/app/delays`: Claim delays and the aging rule. `web/app/rules`: Decision rules. `web/app/log`: Action log. `web/app/data`: cleaning steps. `web/app/brief`: one-page CFO brief. `web/app/guide`: usage guide and limits.
 - `web/next.config.ts`: forwards `/api/*` from the website to the Python API on port 8000.
 - `logs/`: action log, decisions, typed-in claims, saved rules (not in git; "Reset demo" clears them).
 - `DECISIONS.md`: every choice made while building, with the reason.

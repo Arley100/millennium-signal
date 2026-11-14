@@ -3,7 +3,7 @@
 // Review queue: every detected item becomes a task with drafted messages.
 // A person makes the final call; nothing is denied by the system.
 import { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Card, Kpi, Loading, PageHeader, RuleMissingBanner, Td, Th } from "@/components/ui";
+import { Badge, Button, Card, Chip, Kpi, Loading, PageHeader, RuleMissingBanner, Tag, Td, Th } from "@/components/ui";
 import { api, money, useApi, useStore } from "@/lib/store";
 
 type Task = {
@@ -26,6 +26,7 @@ type Task = {
   action: string;
   options: string[];
   alerts: { to: string; body: string }[];
+  evidence: string[];
 };
 
 type Queue = {
@@ -108,7 +109,7 @@ export default function QueuePage() {
           className="xl:col-span-3"
           title="Tasks"
           right={
-            <div className="flex gap-1 rounded-lg border border-line bg-black/20 p-0.5">
+            <div className="flex gap-1 rounded-lg border border-line bg-panel2 p-0.5">
               {FILTERS.map((f) => (
                 <button
                   key={f.key}
@@ -117,7 +118,7 @@ export default function QueuePage() {
                     setPicked(null);
                   }}
                   className={`rounded-md px-2.5 py-1 text-xs transition ${
-                    filter === f.key ? "bg-accent/20 text-ink" : "text-mute hover:text-ink"
+                    filter === f.key ? "bg-panel text-ink shadow-sm" : "text-mute hover:text-ink"
                   }`}
                 >
                   {f.label}
@@ -147,8 +148,8 @@ export default function QueuePage() {
                       setPicked(t.task_id);
                       setMsg(null);
                     }}
-                    className={`cursor-pointer border-t border-line transition hover:bg-white/5 ${
-                      current?.task_id === t.task_id ? "bg-accent/10" : ""
+                    className={`cursor-pointer border-t border-line transition hover:bg-panel2 ${
+                      current?.task_id === t.task_id ? "bg-sky/10" : ""
                     }`}
                   >
                     <Td>
@@ -185,16 +186,27 @@ export default function QueuePage() {
                 <Badge kind={current.kind}>{current.badge}</Badge>
                 <Badge kind={current.decision === "Awaiting review" ? "wait" : "done"}>{current.decision}</Badge>
               </div>
-              <p className="text-sm">
-                <span className="text-mute">Why: </span>
+              <div className="text-sm">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="eyebrow">Why</span>
+                  <Tag kind="fact" />
+                </div>
                 {current.reason}.
-              </p>
-              <p className="text-sm">
-                <span className="text-mute">Automatic action: </span>
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {current.evidence.map((e) => (
+                    <Chip key={e}>{e}</Chip>
+                  ))}
+                </div>
+              </div>
+              <div className="text-sm">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="eyebrow">Proposed action</span>
+                  <Tag kind="reco" />
+                </div>
                 {current.action}
-              </p>
+              </div>
               {current.alerts.map((a) => (
-                <details key={a.to} open className="rounded-xl border border-line bg-black/20">
+                <details key={a.to} open className="rounded-xl border border-line bg-panel2">
                   <summary className="cursor-pointer px-3 py-2 text-xs font-medium text-mute">
                     Drafted message → {a.to}
                   </summary>
@@ -208,7 +220,7 @@ export default function QueuePage() {
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Reviewer note (optional)"
                 aria-label="Reviewer note"
-                className="w-full rounded-lg border border-line bg-black/20 px-3 py-2 text-sm outline-none focus:border-accent"
+                className="w-full rounded-lg border border-line bg-panel2 px-3 py-2 text-sm outline-none focus:border-accent"
               />
               <div className="flex gap-2">
                 <Button variant="primary" disabled={busy} onClick={() => decide(current.task_id, current.options[0])}>
@@ -238,9 +250,10 @@ export default function QueuePage() {
               <div className="flex items-center gap-2">
                 <Badge kind="broker">Broker scorecard</Badge>
                 <span className="font-mono text-sm">{b.broker}</span>
+                <Tag kind="reco" />
                 <Badge kind={b.decision === "Awaiting review" ? "wait" : "done"}>{b.decision}</Badge>
               </div>
-              <pre className="whitespace-pre-wrap rounded-xl border border-line bg-black/20 p-3 font-sans text-[13px] leading-relaxed">
+              <pre className="whitespace-pre-wrap rounded-xl border border-line bg-panel2 p-3 font-sans text-[13px] leading-relaxed">
                 {b.body}
               </pre>
               <div className="flex gap-2">
@@ -293,7 +306,7 @@ function Intake({ intake, onDone }: { intake: Queue["intake"]; onDone: () => voi
     }
   }
 
-  const field = "w-full rounded-lg border border-line bg-black/20 px-3 py-2 text-sm outline-none focus:border-accent";
+  const field = "w-full rounded-lg border border-line bg-panel2 px-3 py-2 text-sm outline-none focus:border-accent";
   const tone = { flagged: "border-accent/40 bg-accent/10", senior: "border-amber/40 bg-amber/10", clear: "border-ok/40 bg-ok/10" };
 
   return (
@@ -354,7 +367,7 @@ function Intake({ intake, onDone }: { intake: Queue["intake"]; onDone: () => voi
             </div>
           )}
           {result.alert && (
-            <pre className="mt-2 whitespace-pre-wrap rounded-lg bg-black/25 p-3 font-sans text-[13px] leading-relaxed">
+            <pre className="mt-2 whitespace-pre-wrap rounded-lg bg-panel2 p-3 font-sans text-[13px] leading-relaxed">
               {result.alert}
             </pre>
           )}

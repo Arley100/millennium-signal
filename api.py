@@ -201,6 +201,8 @@ def build_tasks(d: dict, rules: dict) -> list[dict]:
     for _, r in near.sort_values("claim_amount", ascending=False).iterrows():
         t = base(r, "near_threshold", "Near threshold", r.claim_id)
         t.update(reason=r.reason, action=act.route_action(r.status),
+                 evidence=[f"claims.csv · {r.claim_id}", f"days_from_start = {int(r.days_from_start)}",
+                           f"claim_amount = {r.claim_amount:,.2f}", f"start_date = {r.start_date:%Y-%m-%d}"],
                  options=["Confirm hold", "Release"],
                  alerts=[{"to": act.SENIOR_REVIEW, "body": act.claim_alert(r, r.reason)}])
         tasks.append(t)
@@ -210,6 +212,9 @@ def build_tasks(d: dict, rules: dict) -> list[dict]:
         t.update(reason=f"{r.status} for {int(r.days_open)} days since it was reported "
                         f"(limit {rules['aging_days']} days), handled by {r.adjuster_team}",
                  action=f"Reassign to {to_team} → Retention contacts customer",
+                 evidence=[f"claims.csv · {r.claim_id}", f"status = {r.status}",
+                           f"reported_date = {r.reported_date:%Y-%m-%d}", f"days_open = {int(r.days_open)}",
+                           f"adjuster_team = {r.adjuster_team}"],
                  options=["Confirm reassignment", "Dismiss"],
                  alerts=[{"to": act.VP_CLAIMS, "body": act.aging_alert(r, rules["aging_days"], to_team)},
                          {"to": act.RETENTION, "body": act.retention_note(r)}])

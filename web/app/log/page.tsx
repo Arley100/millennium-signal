@@ -60,13 +60,13 @@ export default function LogPage() {
           </div>
         }
       >
-        <div className="mb-3 flex w-fit gap-1 rounded-lg border border-line bg-black/20 p-0.5">
+        <div className="mb-3 flex w-fit gap-1 rounded-lg border border-line bg-panel2 p-0.5">
           {FILTERS.map((f) => (
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
               className={`rounded-md px-2.5 py-1 text-xs transition ${
-                filter === f.key ? "bg-accent/20 text-ink" : "text-mute hover:text-ink"
+                filter === f.key ? "bg-panel text-ink shadow-sm" : "text-mute hover:text-ink"
               }`}
             >
               {f.label}

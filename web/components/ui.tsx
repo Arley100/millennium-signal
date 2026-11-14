@@ -5,27 +5,28 @@ import { AlertTriangle } from "lucide-react";
 import { useStore } from "@/lib/store";
 
 export const COLORS = {
-  accent: "#ff4b6e",
-  grey: "#5b6170",
-  sky: "#4cc9f0",
-  ok: "#3ddc97",
-  amber: "#ffb454",
-  ink: "#ece8ff",
-  mute: "#9c95bd",
-  line: "#2f2950",
+  accent: "#e5484d",
+  grey: "#b4bcc8",
+  sky: "#2f7fe0",
+  ok: "#17936c",
+  amber: "#e09a2b",
+  ink: "#1f2433",
+  mute: "#667085",
+  line: "#e2e9e9",
 };
 
 export const tooltipStyle = {
-  contentStyle: { background: "#1b1730", border: "1px solid #2f2950", borderRadius: 10, color: "#ece8ff", fontSize: 13 },
-  itemStyle: { color: "#ece8ff" },
-  labelStyle: { color: "#9c95bd" },
-  cursor: { fill: "rgba(255,255,255,0.04)" },
+  contentStyle: { background: "#ffffff", border: "1px solid #e2e9e9", borderRadius: 10, color: "#1f2433", fontSize: 13, boxShadow: "0 6px 20px rgba(18,45,63,.10)" },
+  itemStyle: { color: "#1f2433" },
+  labelStyle: { color: "#667085" },
+  cursor: { fill: "rgba(31,36,51,0.04)" },
 };
 
 export function PageHeader({ title, sub }: { title: string; sub?: string }) {
   return (
     <header className="mb-6">
-      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <p className="eyebrow mb-2">Millennium Mutual / Claims signal</p>
+      <h1 className="text-[28px] font-semibold tracking-tight">{title}</h1>
       {sub && <p className="mt-1 max-w-3xl text-sm text-mute">{sub}</p>}
     </header>
   );
@@ -45,7 +46,7 @@ export function Card({
   right?: React.ReactNode;
 }) {
   return (
-    <section className={`rounded-2xl border border-line bg-panel/80 p-5 shadow-lg shadow-black/20 ${className}`}>
+    <section className={`rounded-2xl border border-line bg-panel p-5 ${className}`}>
       {(title || right) && (
         <div className="mb-3 flex items-start justify-between gap-3">
           <div>
@@ -73,9 +74,9 @@ export function Kpi({
 }) {
   const color = { plain: "text-ink", bad: "text-accent", good: "text-ok", warn: "text-amber" }[tone];
   return (
-    <div className="rounded-2xl border border-line bg-panel/80 p-4">
-      <div className="text-xs text-mute">{label}</div>
-      <div className={`mt-1 text-3xl font-semibold tabular-nums ${color}`}>{value}</div>
+    <div className="rounded-2xl border border-line bg-panel p-4">
+      <div className="eyebrow">{label}</div>
+      <div className={`mt-2 text-3xl font-semibold tabular-nums ${color}`}>{value}</div>
       {note && <div className="mt-1 text-xs text-mute">{note}</div>}
     </div>
   );
@@ -87,12 +88,36 @@ export function Badge({ kind, children }: { kind: string; children: React.ReactN
     near_threshold: "bg-accent/15 text-accent border-accent/40",
     broker: "bg-sky/15 text-sky border-sky/40",
     done: "bg-ok/15 text-ok border-ok/40",
-    wait: "bg-white/5 text-mute border-line",
+    wait: "bg-panel2 text-mute border-line",
   };
   return (
     <span
       className={`inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium ${styles[kind] ?? styles.wait}`}
     >
+      {children}
+    </span>
+  );
+}
+
+/** Says whether a statement comes straight from the data or is our own suggestion. */
+export function Tag({ kind }: { kind: "fact" | "reco" | "human" }) {
+  const map = {
+    fact: ["From the data", "border-line bg-panel2 text-mute"],
+    reco: ["Our recommendation", "border-brand/40 bg-brand/10 text-ok"],
+    human: ["Human decision", "border-sky/30 bg-sky/10 text-sky"],
+  } as const;
+  return (
+    <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 text-[10.5px] font-medium ${map[kind][1]}`}>
+      <span className="h-1 w-1 rounded-full bg-current" />
+      {map[kind][0]}
+    </span>
+  );
+}
+
+/** Evidence chip: the exact field and value a statement rests on. */
+export function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-sky/30 bg-sky/5 px-1.5 py-0.5 font-mono text-[11px] font-medium text-sky">
       {children}
     </span>
   );
@@ -113,8 +138,8 @@ export function Button({
 }) {
   const v =
     variant === "primary"
-      ? "bg-accent text-white hover:brightness-110"
-      : "border border-line bg-white/5 text-ink hover:bg-white/10";
+      ? "bg-ink text-white hover:opacity-90"
+      : "border border-line bg-panel text-ink hover:bg-panel2";
   return (
     <button
       type={type}
@@ -145,8 +170,8 @@ export function RuleMissingBanner() {
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
       <div>
         <span className="font-semibold text-amber">The near-threshold claim rule is flagging 0 claims.</span>{" "}
-        <code className="rounded bg-black/30 px-1">flag_suspicious_claims()</code> in{" "}
-        <code className="rounded bg-black/30 px-1">detect.py</code> has not been written yet. The aging-claim alert
+        <code className="rounded bg-panel2 px-1">flag_suspicious_claims()</code> in{" "}
+        <code className="rounded bg-panel2 px-1">detect.py</code> has not been written yet. The aging-claim alert
         and the broker scorecard are working.
       </div>
     </div>
@@ -158,7 +183,7 @@ export function ErrorBox({ error }: { error: string | null }) {
   return (
     <div className="mb-5 rounded-2xl border border-accent/40 bg-accent/10 p-4 text-sm">
       <span className="font-semibold text-accent">Could not reach the API.</span> {error}. Is{" "}
-      <code className="rounded bg-black/30 px-1">uvicorn api:app --port 8000</code> running?
+      <code className="rounded bg-panel2 px-1">uvicorn api:app --port 8000</code> running?
     </div>
   );
 }

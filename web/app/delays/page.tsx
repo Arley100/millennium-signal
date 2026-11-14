@@ -41,7 +41,7 @@ export default function DelaysPage() {
 
       <div className="grid gap-4 xl:grid-cols-2">
         <Card title="Aging Claim Alert" sub="The detection our team wrote: aging_open_claims() in detect.py." right={<Badge kind="aging">Aging claim</Badge>}>
-          <div className="rounded-xl border border-line bg-black/20 p-4 text-sm leading-relaxed">
+          <div className="rounded-xl border border-line bg-panel2 p-4 text-sm leading-relaxed">
             <div className="text-xs uppercase tracking-wider text-mute">The rule</div>
             <p className="mt-1">
               A claim is aging when its status is <b>Open</b> or <b>Under Review</b> and more than{" "}
@@ -53,13 +53,13 @@ export default function DelaysPage() {
             <RuleSlider name="aging_days" label="Alert when a claim has waited more than" format={(v) => `${v} days`} />
           </div>
           <div className="mt-3 grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-line bg-black/20 p-3">
+            <div className="rounded-xl border border-line bg-panel2 p-3">
               <div className="text-xs text-mute">Aging claims now</div>
               <div data-testid="aging-count" className="text-3xl font-semibold tabular-nums text-amber">
                 {data.aging.length}
               </div>
             </div>
-            <div className="col-span-2 rounded-xl border border-line bg-black/20 p-3">
+            <div className="col-span-2 rounded-xl border border-line bg-panel2 p-3">
               <div className="text-xs text-mute">By adjuster team</div>
               <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                 {Object.entries(data.aging_by_team).map(([t, n]) => (

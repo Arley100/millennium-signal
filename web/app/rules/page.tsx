@@ -57,7 +57,7 @@ export default function RulesPage() {
             <input
               value={rules.reviewer}
               onChange={(e) => setRule({ reviewer: e.target.value })}
-              className="mt-1 block w-72 rounded-lg border border-line bg-black/20 px-3 py-2 text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 block w-72 rounded-lg border border-line bg-panel2 px-3 py-2 text-sm text-ink outline-none focus:border-accent"
             />
           </label>
           <Button onClick={() => defaults && setRule({ ...defaults, reviewer: rules.reviewer })}>Reset rules to defaults</Button>
@@ -69,7 +69,7 @@ export default function RulesPage() {
 
 function Catch({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="mt-4 flex items-baseline justify-between rounded-xl border border-line bg-black/20 px-4 py-3">
+    <div className="mt-4 flex items-baseline justify-between rounded-xl border border-line bg-panel2 px-4 py-3">
       <span className="text-xs text-mute">{label}</span>
       <span className={`text-2xl font-semibold tabular-nums ${color}`}>{value}</span>
     </div>

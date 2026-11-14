@@ -34,3 +34,14 @@ One line per choice: what and why.
 - **Added "Reset demo" (Action log screen, `POST /api/reset`)**: clears the log, decisions, typed claims and saved rules so the demo starts clean after testing.
 - **Messages are drafts only** (shown on screen and logged); no real email, no AI summary, no Vercel, as instructed.
 - **The 83% / 45% renewal figures in the drafted alert are fixed text**; they match the data today (83.2% and 45.2%) and are the team's stated justification for N = 30.
+
+## Borrowed from our memory_360_NOVA project (second pass)
+
+- **Light work area with a dark, grouped navigation rail** (Insights / Operations / Support), replacing the all-dark Streamlit palette: it is the layout that won with NOVA and reads better on a projector.
+- **System fonts instead of Poppins**: the Google Fonts download failed on this machine; a demo must not depend on the venue network.
+- **Top status bar**: API connected, "N of 3 detections active", and "human decides", so the state of the system is always visible (NOVA's "AI configured / baseline state" idea).
+- **"From the data" vs "Our recommendation" labels** on queue tasks, broker alerts and the brief: NOVA's "documented commitment vs our recommendation". Judges can see we do not pass off suggestions as facts.
+- **Evidence chips** on every task (file, claim id, the exact field values the rule used): NOVA's citation chips, adapted to tabular data.
+- **CFO brief page** (`/brief`), printable on one page: NOVA's handover brief. All numbers are read live from the API.
+- **Usage guide page** (`/guide`) with a "Limits and uncertainties" section, as in NOVA's guide and README.
+- **Not borrowed**: the AI chat assistant, file upload/update flow and Vercel deployment (AI summary and Vercel were excluded for this build).

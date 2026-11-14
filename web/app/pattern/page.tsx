@@ -66,7 +66,7 @@ export default function PatternPage() {
                 {thresholdBin < 25000 && (
                   <ReferenceLine
                     x={thresholdBin}
-                    stroke="#ffffff"
+                    stroke="#1f2433"
                     strokeDasharray="4 4"
                     label={{ value: "senior review starts", fill: COLORS.mute, fontSize: 11, position: "top" }}
                   />
@@ -129,7 +129,7 @@ export default function PatternPage() {
                   fill={COLORS.accent}
                   fillOpacity={0.08}
                 />
-                <ReferenceLine y={rules.threshold} stroke="#ffffff" strokeDasharray="4 4" />
+                <ReferenceLine y={rules.threshold} stroke="#1f2433" strokeDasharray="4 4" />
                 <Scatter name="Other claims" data={others} fill={COLORS.grey} fillOpacity={0.7} isAnimationActive={false} />
                 <Scatter name="Flagged" data={flagged} fill={COLORS.accent} isAnimationActive={false} />
               </ScatterChart>
