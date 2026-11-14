@@ -43,7 +43,7 @@ export default function GuidePage() {
               <L href="/log">Action log</L> → Reset demo (start clean).
             </li>
             <li>
-              <L href="/">Overview</L>: the loss ratio with and without the flagged broker.
+              <L href="/">Overview</L>: claims paid ÷ premium earned, with and without the flagged broker.
             </li>
             <li>
               <L href="/pattern">The pattern</L>: the scorecard, then move a slider and watch it change.
@@ -81,9 +81,16 @@ export default function GuidePage() {
         <Card title="Limits and uncertainties">
           <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed">
             <li>A flag asks for a second look. It is not a fraud finding, and the system never denies a claim.</li>
+            <li>
+              “Claims paid ÷ premium earned” is a diagnostic. It is not a full loss ratio or profit: reserves, expenses and
+              commissions are not in the data.
+            </li>
             <li>Earned premium is estimated from each policy&apos;s start date; no data dictionary came with the files.</li>
             <li>Paid claims with no recorded amount count in money paid but cannot be tested against the review line.</li>
-            <li>The renewal comparison is a correlation in one year of data, not proof that delay causes non-renewal.</li>
+            <li>
+              Longer waits are associated with lower renewal. That is a correlation in one year of data, not proof that
+              delay causes non-renewal: there are no renewal-decision dates, prices or complaints in the files.
+            </li>
             <li>“Team with capacity” means fewest open claims, then fastest settlement this year. It ignores staffing we cannot see.</li>
             <li>Messages are drafts on screen and in the log. Nothing is emailed.</li>
             {summary?.near_threshold_rule_missing && (

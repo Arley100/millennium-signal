@@ -26,7 +26,7 @@ Data as of Oct 31, 2026.
 |---|---|
 | Data after cleaning | **4,680 policies · 847 claims** (9 cleaning steps, each logged with its reason) |
 | Claims paid ÷ premium earned | **64%** overall · **56%** without broker B07 |
-| Broker scorecard | **B07 is the only broker flagged**: 429% loss ratio, 3 of 3 warning signs |
+| Broker scorecard | **B07 is the only broker flagged**: pays out 429% of the premium it earns, 3 of 3 warning signs |
 | Aging Claim Alert (N = 30 days) | **15 open claims**, 13 of them with one adjuster team |
 | Senior queue monitor | **11 claims of $10,000 or more still undecided** ($221,881 recorded, oldest 206 days) |
 | Renewal after a claim | **83%** when the wait was 15–30 days · **45%** past 30 days |
@@ -35,7 +35,7 @@ Data as of Oct 31, 2026.
 
 **1. One broker, not the broker channel.** B07 started selling in January 2026 and pays out more than four times the premium it earns. The other nine brokers perform like the company's own agents and online channel.
 
-**2. Slow claims cost renewals.** One adjuster team's median settlement time roughly doubled in 2026. Customers who wait more than 30 days renew about half as often as those who wait 15 to 30 days.
+**2. Slow claims go with lost renewals.** One adjuster team's median settlement time roughly doubled in 2026. Customers who wait more than 30 days renew about half as often as those who wait 15 to 30 days.
 
 ![Claim delays](docs/screenshots/04-claim-delays.png)
 
@@ -253,7 +253,8 @@ HANDOFF.md            How to run, demo path, plain-English file guide
 - A flag asks for a second look. It is not a fraud finding, and the system never denies a claim.
 - Earned premium is estimated from each policy's start date. No data dictionary came with the files.
 - Paid claims with no recorded amount count in money paid but cannot be tested against the review line.
-- The renewal comparison is a correlation in one year of data, not proof that delay causes non-renewal.
+- "Claims paid ÷ premium earned" is a diagnostic. It is not a full loss ratio or profit: reserves, expenses and commissions are not in the data.
+- Longer waits are associated with lower renewal. That is a correlation in one year of data, not proof that delay causes non-renewal.
 - "Team with capacity" means fewest open claims, then fastest settlement this year.
 - Messages are drafts shown on screen and logged. Nothing is emailed.
 - **Current state:** the near-threshold claim rule (`flag_suspicious_claims` in `detect.py`) is not written yet, so 3 of 4 detections are active and the screenshots show 0 near-threshold claims.

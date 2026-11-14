@@ -91,12 +91,12 @@ export default function BriefPage() {
         <Line label="Priorities" tag="reco">
           1) Route {names === "none" ? "any flagged broker" : names}&apos;s new policies and claims through senior review
           until the account is audited; keep selling through the other brokers. 2) Move aging claims from the slowest
-          team to the team with capacity, and have Retention call those customers. 3) Keep the 30-day alert running: it
-          sits exactly where renewals fall off.
+          team to the team with capacity, and have Retention call those customers. 3) Keep the 30-day alert running: waits
+          past 30 days are associated with much lower renewal.
         </Line>
 
         <Line label="Limits">
-          A flag asks for a second look; it is not a fraud finding. Earned premium is estimated from start dates. Claims
+          A flag asks for a second look; it is not a fraud finding. “Paid ÷ premium earned” is a diagnostic, not a full loss ratio or profit; earned premium is estimated from start dates. Longer waits are associated with lower renewal, which does not prove delay causes it. Claims
           with no recorded amount cannot be checked against the review line. Thresholds are choices, shown in Decision
           rules, and a person confirms every action.
         </Line>

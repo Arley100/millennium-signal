@@ -141,7 +141,7 @@ export default function PatternPage() {
       <Card
         className="mt-4"
         title="Broker scorecard"
-        sub={`Typical broker: loss ratio ${pct(typical.loss_ratio)}, claim rate ${pct(typical.claim_rate)}, early claims ${pct(typical.early_share)}. A broker is flagged when 2 of 3 measures are ≥ ${rules.multiple}× typical and it has at least 10 claims.`}
+        sub={`Typical broker: claims paid ÷ premium earned ${pct(typical.loss_ratio)}, claim rate ${pct(typical.claim_rate)}, early claims ${pct(typical.early_share)}. A broker is flagged when 2 of 3 measures are ≥ ${rules.multiple}× typical and it has at least 10 claims.`}
       >
         <div className="overflow-auto rounded-xl border border-line">
           <table className="w-full border-collapse">
@@ -150,7 +150,7 @@ export default function PatternPage() {
                 <Th>Broker</Th>
                 <Th right>Policies</Th>
                 <Th>First sale</Th>
-                <Th right>Loss ratio</Th>
+                <Th right>Paid ÷ premium earned</Th>
                 <Th right>Policies with a claim</Th>
                 <Th right>Early claims</Th>
                 <Th right>Near-threshold claims</Th>

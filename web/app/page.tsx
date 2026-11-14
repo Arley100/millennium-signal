@@ -38,7 +38,7 @@ export default function OverviewPage() {
           value={`${summary.policies.toLocaleString()}`}
           note={`${summary.claims.toLocaleString()} claims · ${summary.policies_ytd_2026.toLocaleString()} sold Jan–Oct 2026`}
         />
-        <Kpi label="Claims paid ÷ premium earned" value={pct(summary.loss_ratio)} note="Loss ratio, all business" tone="bad" />
+        <Kpi label="Claims paid ÷ premium earned" value={pct(summary.loss_ratio)} note="All business · a diagnostic, not profit" tone="bad" />
         <Kpi
           label={`Same, without ${brokers}`}
           value={pct(summary.loss_ratio_ex_flagged)}

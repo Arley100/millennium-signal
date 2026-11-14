@@ -51,7 +51,7 @@ export default function RulesPage() {
 
         <Card title="Broker scorecard" sub="Compares each broker with the typical broker." right={<Badge kind="broker">Broker</Badge>}>
           <p className="mb-4 text-sm leading-relaxed">
-            Flags a broker when at least 2 of its 3 measures (loss ratio, share of policies with a claim, share of early
+            Flags a broker when at least 2 of its 3 measures (claims paid ÷ premium earned, share of policies with a claim, share of early
             claims) are <b>{rules.multiple}×</b> the typical broker or more, and it has at least 10 claims.
           </p>
           <RuleSlider name="multiple" label="Flag when measures are" format={(v) => `≥ ${v}× typical`} />

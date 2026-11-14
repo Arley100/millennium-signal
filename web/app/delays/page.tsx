@@ -36,7 +36,7 @@ export default function DelaysPage() {
     <>
       <PageHeader
         title="Claim delays"
-        sub="The VP of Claims and the Head of Retention describe the same problem: slow claims cost renewals."
+        sub="The VP of Claims and the Head of Retention may be describing the same problem: long waits go together with lost renewals."
       />
 
       <div className="grid gap-4 xl:grid-cols-2">
@@ -109,8 +109,8 @@ export default function DelaysPage() {
             </ResponsiveContainer>
           </div>
           <p className="mt-2 rounded-xl border border-amber/30 bg-amber/10 p-3 text-sm">
-            Customers who waited <b>15–30 days</b> renewed <b>{pct(mid?.renewal)}</b> of the time. Past <b>30 days</b> it
-            drops to <b className="text-accent">{pct(slow?.renewal)}</b>. That cliff is why the alert fires at 30 days.
+            Customers who waited <b>15–30 days</b> renewed <b>{pct(mid?.renewal)}</b> of the time. Past <b>30 days</b> the
+            rate was <b className="text-accent">{pct(slow?.renewal)}</b>. That gap is why we set the alert at 30 days. It is an association, not proof that the wait caused the customer to leave.
           </p>
         </Card>
       </div>

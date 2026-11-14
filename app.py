@@ -88,7 +88,7 @@ with tab1:
 
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Policies sold Jan–Oct 2026", f"{len(ytd26):,}", f"{len(ytd26) / len(ytd25) - 1:+.0%} vs 2025")
-    k2.metric("Claims paid ÷ premium earned", f"{total_lr:.0%}", help="Loss ratio: share of premium paid back out in claims.")
+    k2.metric("Claims paid ÷ premium earned", f"{total_lr:.0%}", help="Share of earned premium paid back out in claims. A diagnostic, not a full loss ratio or profit.")
     k3.metric(f"Same, without {', '.join(flagged_brokers) or 'flagged brokers'}", f"{clean_lr:.0%}",
               f"{clean_lr - total_lr:+.0%}", delta_color="inverse")
     k4.metric("Paid on flagged claims", f"${flagged_claims.paid_amount_filled.sum():,.0f}")

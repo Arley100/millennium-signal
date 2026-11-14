@@ -101,7 +101,7 @@ def aging_alert(row: pd.Series, max_days: int, to_team: str) -> str:
         f"Handled by: {row.adjuster_team} · {row.city}\n\n"
         f"Suggested action: reassign this claim to {to_team}, which has capacity "
         f"(fewest open claims and the fastest settlement time this year).\n"
-        f"Why it matters: customers who wait over 30 days renew 45% of the time, "
+        f"Context: in this data, customers who waited over 30 days renewed 45% of the time, "
         f"against 83% for those who wait 15 to 30 days."
     )
 
@@ -113,7 +113,7 @@ def retention_note(row: pd.Series) -> str:
         f"Customer {row.customer_id} ({row.city}, {row.policy_type} policy {row.policy_id}) has been "
         f"waiting {int(row.days_open)} days for a {row.claim_type} claim.\n"
         f"Please call to apologise for the delay, confirm the claim is being moved to a team "
-        f"with capacity, and give a named contact. This customer is at risk of not renewing."
+        f"with capacity, and give a named contact. Long waits are associated with lower renewal in our data."
     )
 
 

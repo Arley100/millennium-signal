@@ -48,7 +48,7 @@ What it found in the data (as of Oct 31, 2026):
 
 ## Accomplishments that we're proud of
 
-- The 30-day threshold is justified by the data: renewals fall from 83% to 45% right at that point.
+- The 30-day threshold is grounded in the data: customers who waited 15–30 days renewed 83% of the time, against 45% past 30 days. We present it as an association, not proof of cause.
 - Every task shows the exact fields that triggered it.
 - A one-page CFO brief that prints cleanly, with live numbers.
 - The system never denies a claim. A person makes every call, and the log keeps it.

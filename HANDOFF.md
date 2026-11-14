@@ -23,7 +23,7 @@ Restart the first window after any change to a `.py` file. Fallback: `streamlit 
 
 ## What works (tested in the browser)
 
-- `/api/summary`: 4,680 policies, 847 claims, 64% loss ratio, 56% without B07, B07 the only flagged broker, 15 aging claims. Flagged claims = 0 (stub).
+- `/api/summary`: 4,680 policies, 847 claims, 64% claims paid ÷ premium earned, 56% without B07, B07 the only flagged broker, 15 aging claims. Flagged claims = 0 (stub).
 - Overview, The pattern, Review queue, Claim delays, Decision rules, Action log, Data & cleaning all load with no console errors.
 - Sliders (sidebar, Pattern, Claim delays, Decision rules) update every screen; N = 7 → 34 aging claims, 30 → 15, 90 → 4.
 - Review queue: filters, row selection, "Confirm reassignment", "Dismiss", "Confirm broker review", "Dismiss broker alert", "Submit claim" all clicked and logged.
@@ -62,7 +62,7 @@ AI summary, real email, Vercel (as instructed). 21st.dev components (see DECISIO
 ## Demo click path
 
 1. **Reset first**: Action log → Reset demo → Yes, reset.
-2. **Overview**: 64% loss ratio, 56% without B07; B07 bar at 429%.
+2. **Overview**: 64% of earned premium paid out in claims, 56% without B07; B07 bar at 429%.
 3. **The pattern**: broker scorecard, B07 flagged 3 of 3.
 4. **Move a slider**: drag "Aging claim after" in the left panel (15 → more/fewer), or "Broker vs typical" to 4× (B07 drops off), then put it back.
 5. **Review queue**: pick an Aging claim task, read the two drafted messages, click **Confirm reassignment**

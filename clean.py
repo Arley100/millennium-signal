@@ -69,7 +69,7 @@ def load_and_clean(data_dir: str | Path = "data"):
         pol.annual_premium.astype(str).str.replace(r"[$,\s]", "", regex=True), errors="coerce")
     note("Converted text premiums ('$1,046.62') to numbers", n,
          "Text values are ignored by sums, so premium income was understated.",
-         "Loss ratios would have looked worse than reality.")
+         "Claims paid ÷ premium would have looked worse than reality.")
 
     # 5. Mixed date formats.
     pol["start_date"], n1 = parse_dates(pol.start_date)
