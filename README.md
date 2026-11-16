@@ -48,7 +48,7 @@ Data as of Oct 31, 2026.
 | Step | What happens | Where |
 |---|---|---|
 | **Data** | Cleans the two exports. Every change is recorded with the number of rows and the reason. | Data & cleaning |
-| **Detect** | Runs the Aging Claim Alert, the senior queue monitor, the broker scorecard and the near-threshold claim rule. | The pattern · Claim delays |
+| **Detect** | Runs three detections: the Aging Claim Alert, the senior queue monitor and the broker scorecard. A fourth, the near-threshold claim rule, is designed but not written yet. | The pattern · Claim delays |
 | **Decide** | People set the thresholds with sliders. Nothing is hard-coded to a broker or a team. | Decision rules |
 | **Act** | Each hit becomes a review task with drafted messages. A reviewer confirms or dismisses. | Review queue · Action log |
 
@@ -120,7 +120,7 @@ flowchart LR
     end
     subgraph Python["Python pipeline"]
         CL[clean.py<br/>cleaning + log]
-        DE[detect.py<br/>4 detections]
+        DE[detect.py<br/>3 active detections]
         AC[actions.py<br/>drafts · decisions · log]
         API[api.py<br/>FastAPI · JSON]
     end
