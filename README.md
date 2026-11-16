@@ -8,7 +8,9 @@
 
 **DATA → DETECT → DECIDE → ACT**
 
-[Live demo](https://millennium-signal.vercel.app) · Hack 2 the Future · Business Track
+[Live demo](https://millennium-signal.vercel.app) · Hack 2 The Future · Business Track
+
+🏆 **Winner, Business track** · Hack 2 The Future (SCS Concordia), November 14, 2026 · Insurance case: Millennium Mutual
 
 </div>
 
@@ -273,6 +275,10 @@ HANDOFF.md            How to run, demo path, plain-English file guide
 - **During development:** Claude Code (Anthropic) helped write the interface and the API layer. The team reviewed the work.
 - **In the product:** no AI model runs. Every number comes from the two exports through rules a person can read.
 
+## Award
+
+**Winner of the Business track at Hack 2 The Future**, the hackathon run by SCS Concordia on November 14, 2026. The track offered a choice of business cases; we took Option A, the insurance case (Millennium Mutual). The project was built during the 3.5-hour competition window and judged on a live local demo and Q&A.
+
 ## Team
 
-Arley Ndaribike · Wanlin Song
+**The Architects:** Arley Ndaribike · Wanlin Song
